@@ -5,6 +5,12 @@ import {
   searchContentPodcast,
   deletePodcastById,
   getRecommendPodcasts,
+  likePost,
+  unLikePost,
+  getStatusLikePost,
+  commentPost,
+  getCommentPost,
+  getTotalLikeCount,
 } from "../../controllers/data/podcastController";
 const router = require("express").Router();
 
@@ -18,6 +24,16 @@ router.route("/new_feed")
 router.route("/:id")
   .get(getDetailPodcast)
   .delete(deletePodcastById);
+
+router.route("/:id/like")
+  .post(likePost)
+
+router.route("/:id/unlike")
+  .post(unLikePost)
+
+router.route("/:id/comment")
+  .get(getCommentPost)
+  .post(commentPost)
 
 router.route("/search")
   .get(searchContentPodcast);
