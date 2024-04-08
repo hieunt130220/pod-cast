@@ -26,7 +26,7 @@ app.set("trust proxy", 1);
 
 app.use("/api/auth", authRoute);
 app.use("/api/data", fileUploadRoute);
-app.use("/api/data", podcastRoute);
+app.use("/api/podcast", verify, podcastRoute);
 app.use("/api/users", verify, userRoute);
 app.use("/api/data", postRoute);
 

@@ -61,8 +61,7 @@ const updateProfile = asyncHandler(async (req: IUserReq, res: Response) => {
   }
 });
 
-const searchUserByUsername = asyncHandler(
-  async (req: Request, res: Response) => {
+const searchUserByUsername = asyncHandler(async (req: Request, res: Response) => {
     const searchKeyword = req.query.username;
 
     try {
@@ -86,8 +85,7 @@ const searchUserByUsername = asyncHandler(
   }
 );
 
-const getOtherUserProfile = asyncHandler(
-  async (req: IUserReq, res: Response) => {
+const getOtherUserProfile = asyncHandler(async (req: IUserReq, res: Response) => {
     const currentId = req.user.id;
     const otherUserId = req.params.id;
 
@@ -117,7 +115,7 @@ const getOtherUserProfile = asyncHandler(
         .exec();
       res.json({
         data: {
-          id: infoUser.user.id,
+          _id: infoUser.user.id,
           username: infoUser.user.username,
           avatar: infoUser.user.avatar,
           followers: infoUser.user.followers,

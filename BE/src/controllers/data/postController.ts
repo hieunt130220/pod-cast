@@ -7,6 +7,9 @@ const Relationship = require("../../models/data/relationshipModel");
 const Podcast = require("../../models/data/podcastModel");
 const StatusPost = require("../../models/data/statusPost");
 
+interface IUserReq extends Request {
+  user?: any;
+}
 
 const getRelationship = asyncHandler(async (req: Request, res: Response) => {
   const currentId = req.query.myId;

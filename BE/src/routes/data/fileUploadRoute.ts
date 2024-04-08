@@ -1,6 +1,5 @@
 import {
-  audioFileUpload,
-  audioUploadToPython,
+  createPodcast
 } from "../../controllers/data/fileUploadController";
 const router = require("express").Router();
 const multer = require("multer");
@@ -12,14 +11,7 @@ router.route("/uploadSingleFile").post(
     { name: "file", maxCount: 1 },
     { name: "background", maxCount: 1 },
   ]),
-  audioFileUpload
+  createPodcast
 );
 
-router.route("/uploadFileToPythonFile").post(
-  uploadAudio.fields([
-    { name: "file", maxCount: 1 },
-    { name: "background", maxCount: 1 },
-  ]),
-  audioUploadToPython
-);
 module.exports = router;

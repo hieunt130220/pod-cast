@@ -12,51 +12,52 @@ interface dataPodcast {
   caption: string;
 }
 
-const getAllPodcastByUserId = asyncHandler(
-  async (req: Request, res: Response) => {
-    try {
-      const dataPodcast = await Podcast.find({
-        user: req.params.id,
-      }).populate("user");
+interface IUserReq extends Request {
+  user?: any;
+}
 
-      res.status(200).json({ dataPodcast });
-    } catch (error) {
-      res.status(500).json(error);
-    }
+const getAllPodcastByUserId = asyncHandler(async (req: IUserReq, res: Response) => {
+  try {
+    const limit: number = Number(req.query.perPage) || 20
+    const page: number = Number(req.query.page) || 1
+    console.log(limit, page)
+    const query = { user: req.params.id }
+    const podcasts = await Podcast.find(query)
+      .populate("user")
+      .skip((limit * page) - limit)
+      .limit(limit)
+    const count = await Podcast.countDocuments(query)
+    res.status(200)
+      .json({
+        data: podcasts,
+        has_next_page: count > limit * page
+      })
+  } catch (error) {
+    console.log(error)
+    res.status(500).json(error);
   }
+}
 );
 
-const getPodcastFollowingUser = asyncHandler(
-  async (req: Request, res: Response) => {
-    try {
-      const dataUser = await User.find(
-        {
-          _id: req.params.id,
-        },
-        {
-          _id: 0,
-          following: 1,
-        }
-      );
-      let listData: dataPodcast[] = [];
-      const promises = dataUser[0].following.map(async (item: any) => {
-        const regex = 'new ObjectId(" ")';
-        const id = item.toString().replace(regex, "").trim();
+const getPodcastFollowingUser = asyncHandler(async (req: IUserReq, res: Response) => {
+  try {
+    const dataUser = await User.find({ _id: req.user.id }, { _id: 0, following: 1 });
 
-        const data = await Podcast.find({
-          user: id,
-        }).populate("user");
-
-        return data;
-      });
-
-      listData = [].concat(...(await Promise.all(promises)));
-
-      res.status(200).json(listData);
-    } catch (error) {
-      res.status(500).json(error);
-    }
+    let listData: dataPodcast[] = [];
+    const promises = dataUser[0].following.map(async (item: any) => {
+      const regex = 'new ObjectId(" ")';
+      const id = item.toString().replace(regex, "").trim();
+      const data = await Podcast.find({
+        user: id,
+      }).populate("user");
+      return data;
+    });
+    listData = [].concat(...(await Promise.all(promises)));
+    res.status(200).json(listData);
+  } catch (error) {
+    res.status(500).json(error);
   }
+}
 );
 
 const getDetailPodcast = asyncHandler(async (req: Request, res: Response) => {
@@ -64,14 +65,16 @@ const getDetailPodcast = asyncHandler(async (req: Request, res: Response) => {
     const dataPodcast = await Podcast.findById(req.params.id).populate("user");
 
     res.status(200).json({
-      _id: dataPodcast._id,
-      audio: dataPodcast.audio,
-      background: dataPodcast.background,
-      caption: dataPodcast.caption,
-      user: dataPodcast.user,
-      uploadDate: dataPodcast.uploadDate,
-      content: dataPodcast.content,
-      likes: dataPodcast.likes,
+      data: {
+        _id: dataPodcast._id,
+        audio: dataPodcast.audio,
+        background: dataPodcast.background,
+        caption: dataPodcast.caption,
+        user: dataPodcast.user,
+        uploadDate: dataPodcast.uploadDate,
+        content: dataPodcast.content,
+        likes: dataPodcast.likes,
+      }
     });
   } catch (error) {
     res.status(500).json(error);
