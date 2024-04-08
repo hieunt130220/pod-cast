@@ -1,7 +1,5 @@
 import {
   getRelationship,
-  userFollow,
-  userUnFollow,
   likePost,
   unLikePost,
   getStatusLikePost,
@@ -10,10 +8,6 @@ import {
   getTotalLikeCount,
 } from "../../controllers/data/postController";
 const router = require("express").Router();
-
-router.route("/follow_user").post(userFollow);
-
-router.route("/unfollow_user").post(userUnFollow);
 router.route("/relationship").get(getRelationship);
 router.route("/like_post").post(likePost);
 router.route("/unlike_post").post(unLikePost);

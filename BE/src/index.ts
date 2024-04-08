@@ -7,7 +7,7 @@ import connectDB from "./config/db";
 const authRoute = require("./routes/auth/authRoute");
 const fileUploadRoute = require("./routes/data/fileUploadRoute");
 const podcastRoute = require("./routes/data/podcastRoute");
-const userRoute = require("./routes/auth/userRoute");
+const userRoute = require("./routes/users/userRoute");
 const postRoute = require("./routes/data/postRoute");
 
 const app: Application = express();

@@ -1,10 +1,11 @@
 import {
-  getUserProfile,
+  follow,
+  unFollow,
   updateProfile,
   searchUserByUsername,
   getOtherUserProfile,
   getMe
-} from "../../controllers/auth/userController";
+} from "../../controllers/users/userController";
 const router = require("express").Router();
 const multer = require("multer");
 const { storageImg } = require("../../config/cloudinary");
@@ -19,6 +20,10 @@ router
 
 router.route("/recent_searches").get(searchUserByUsername);
 
-router.route("/other_profile").get(getOtherUserProfile);
+router.route("/:id").get(getOtherUserProfile);
+
+router.route("/:id/follow").post(follow);
+
+router.route("/:id/unFollow").post(unFollow);
 
 module.exports = router;

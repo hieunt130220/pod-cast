@@ -7,115 +7,6 @@ const Relationship = require("../../models/data/relationshipModel");
 const Podcast = require("../../models/data/podcastModel");
 const StatusPost = require("../../models/data/statusPost");
 
-const userFollow = asyncHandler(async (req: Request, res: Response) => {
-  const currentId = req.body.myId;
-  const otherId = req.body.otherUserId;
-
-  try {
-    // following
-    await User.updateOne(
-      { _id: currentId },
-      {
-        $addToSet: {
-          following: otherId,
-        },
-      }
-    );
-    await Relationship.updateOne(
-      {
-        currentUser: currentId,
-        user: otherId,
-      },
-      {
-        $set: {
-          following: true,
-        },
-      }
-    );
-
-    // followed
-    await User.updateOne(
-      { _id: otherId },
-      {
-        $addToSet: {
-          followers: currentId,
-        },
-      }
-    );
-
-    await Relationship.updateOne(
-      {
-        currentUser: otherId,
-        user: currentId,
-      },
-      {
-        $set: {
-          followed_by: true,
-        },
-      }
-    );
-
-    res.json({
-      message: "Follow successfully!",
-    });
-  } catch (error) {
-    res.status(500).json({ error: error });
-  }
-});
-
-const userUnFollow = asyncHandler(async (req: Request, res: Response) => {
-  const currentId = req.body.myId;
-  const otherId = req.body.otherUserId;
-
-  try {
-    // following
-    await User.updateOne(
-      { _id: currentId },
-      {
-        $pull: {
-          following: otherId,
-        },
-      }
-    );
-    await Relationship.updateOne(
-      {
-        currentUser: currentId,
-        user: otherId,
-      },
-      {
-        $set: {
-          following: false,
-        },
-      }
-    );
-    // followers
-    await User.updateOne(
-      { _id: otherId },
-      {
-        $pull: {
-          followers: currentId,
-        },
-      }
-    );
-    await Relationship.updateOne(
-      {
-        currentUser: otherId,
-        user: currentId,
-      },
-      {
-        $set: {
-          followed_by: false,
-        },
-      }
-    );
-
-    res.json({
-      message: "Unfollow successfully!",
-    });
-  } catch (error) {
-    res.status(500).json({ error: error });
-  }
-});
 
 const getRelationship = asyncHandler(async (req: Request, res: Response) => {
   const currentId = req.query.myId;
@@ -327,8 +218,6 @@ const getTotalLikeCount = asyncHandler(async (req: Request, res: Response) => {
 });
 
 export {
-  userFollow,
-  userUnFollow,
   getRelationship,
   likePost,
   unLikePost,
