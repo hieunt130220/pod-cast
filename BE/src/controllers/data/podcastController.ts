@@ -5,6 +5,8 @@ const Podcast = require("../../models/data/podcastModel");
 const PodcastUser = require("../../models/data/podcastUserModel");
 const User = require("../../models/auth/userModel");
 const StatusPost = require("../../models/data/statusPost");
+const assemblyai = require("assemblyai-v2-node-sdk");
+const client = new assemblyai.AssemblyClient(process.env.API_SPEECH2TEXT);
 
 interface dataPodcast {
   user: string;
@@ -15,22 +17,113 @@ interface dataPodcast {
 
 interface IUserReq extends Request {
   user?: any;
+  files?: any;
 }
+
+const createPodcast = asyncHandler(async (req: IUserReq, res: Response) => {
+  const userId = req.user.id;
+  const userExits = await PodcastUser.findOne({
+    user: userId,
+  });
+
+  try {
+    let text: string = "";
+    const audioFile = req.files.file;
+    const backgroundFile = req.files.background;
+    if (!audioFile) {
+      return res.status(400).json({
+        status_code: 400,
+        message: "No file uploaded"
+      });
+    }
+
+    let urlCloudinary = audioFile[0].path;
+    const transcript = await client.createTranscript({
+      audio_url: urlCloudinary,
+    });
+    await client.pollForTranscript(transcript.id).then((result: any) => {
+      text = result.text;
+    });
+
+    const podCast = new Podcast({
+      user: userId,
+      audio: urlCloudinary,
+      background: backgroundFile
+        ? backgroundFile[0].path
+        : PodcastUser.background,
+      caption: req.body.caption,
+      content: text,
+    });
+
+    await podCast.save();
+
+    if (userExits) {
+      await PodcastUser.updateOne(
+        { user: userId },
+        {
+          $push: {
+            podcasts: podCast._id,
+          },
+        }
+      );
+    } else {
+      await PodcastUser.create({
+        user: userId,
+        podcasts: podCast._id,
+      });
+    }
+
+    // Return a success message
+    res.json({
+      data: {
+        _id: podCast.id,
+        user: {
+          _id: req.user.id,
+          username: req.user.username,
+          avatar: req.user.avatar
+        },
+        audio: podCast.audio,
+        background: podCast.background,
+        caption: podCast.caption,
+        is_like: podCast.likes.includes(userId),
+        comment_count: podCast.comments.length,
+        like_count: podCast.likes.length
+      },
+      message: "File uploaded successfully!",
+      status_code: 200,
+    });
+  } catch (err) {
+    res.status(500).json({ message: "Error uploading file", error: err });
+    console.log(err);
+  }
+});
 
 const getAllPodcastByUserId = asyncHandler(async (req: IUserReq, res: Response) => {
   try {
     const limit: number = Number(req.query.perPage) || 20
     const page: number = Number(req.query.page) || 1
-    console.log(limit, page)
     const query = { user: req.params.id }
     const podcasts = await Podcast.find(query)
-      .populate("user")
+      .populate("user", 'username avatar')
+      .select('audio background likes comments uploadDate')
       .skip((limit * page) - limit)
       .limit(limit)
+    const promises = podcasts.map(async (item: any) => {
+      return {
+        _id: item.id,
+        user: item.user,
+        audio: item.audio,
+        background: item.background,
+        like_count: item.likes.length,
+        comment_count: item.comments.length,
+        is_like: item.likes.includes(req.user.id),
+        uploadDate: item.uploadDate
+      }
+    })
     const count = await Podcast.countDocuments(query)
     res.status(200)
       .json({
-        data: podcasts,
+        data: [].concat(...(await Promise.all(promises))),
         has_next_page: count > limit * page
       })
   } catch (error) {
@@ -43,27 +136,48 @@ const getAllPodcastByUserId = asyncHandler(async (req: IUserReq, res: Response) 
 const getPodcastFollowingUser = asyncHandler(async (req: IUserReq, res: Response) => {
   try {
     const dataUser = await User.find({ _id: req.user.id }, { _id: 0, following: 1 });
-
+    const limit: number = Number(req.query.perPage) || 20
+    const page: number = Number(req.query.page) || 1
     let listData: dataPodcast[] = [];
     const promises = dataUser[0].following.map(async (item: any) => {
       const regex = 'new ObjectId(" ")';
       const id = item.toString().replace(regex, "").trim();
       const data = await Podcast.find({
         user: id,
-      }).populate("user");
+      })
+      .populate("user", 'username avatar')
+      .select('audio background likes comments uploadDate')
       return data;
+    })
+    
+    const data: any = [].concat(...(await Promise.all(promises))).map(async (item: any) => {
+      return {
+        _id: item.id,
+        user: item.user,
+        audio: item.audio,
+        background: item.background,
+        like_count: item.likes.length,
+        comment_count: item.comments.length,
+        is_like: item.likes.includes(req.user.id),
+        uploadDate: item.uploadDate
+      }
+    })
+
+    listData = [].concat(...(await Promise.all(data)))
+    res.status(200).json({
+      data: listData.slice(limit * (page - 1), limit * page),
+      has_next_page: listData.length > limit * page
     });
-    listData = [].concat(...(await Promise.all(promises)));
-    res.status(200).json(listData);
   } catch (error) {
+    console.log(error)
     res.status(500).json(error);
   }
 }
 );
 
-const getDetailPodcast = asyncHandler(async (req: Request, res: Response) => {
+const getDetailPodcast = asyncHandler(async (req: IUserReq, res: Response) => {
   try {
-    const dataPodcast = await Podcast.findById(req.params.id).populate("user");
+    const dataPodcast = await Podcast.findById(req.params.id).populate("user", 'username avatar');
 
     res.status(200).json({
       data: {
@@ -74,11 +188,16 @@ const getDetailPodcast = asyncHandler(async (req: Request, res: Response) => {
         user: dataPodcast.user,
         uploadDate: dataPodcast.uploadDate,
         content: dataPodcast.content,
-        likes: dataPodcast.likes,
+        is_like: dataPodcast.likes.includes(req.user.id),
+        like_count: dataPodcast.likes.length,
+        comment_count: dataPodcast.comments.length
       }
     });
   } catch (error) {
-    res.status(500).json(error);
+    res.status(404).json({
+      status_code: 404,
+      message: "Not found"
+    })
   }
 });
 
@@ -165,9 +284,13 @@ const searchContentPodcast = asyncHandler(
   }
 );
 
-const deletePodcastById = asyncHandler(async (req: Request, res: Response) => {
-  const idPodcast = req.query.idPodcast;
-  const idUser = req.query.idUser;
+const deletePodcastById = asyncHandler(async (req: IUserReq, res: Response) => {
+  const idPodcast = req.params.id;
+  const idUser = req.user.id;
+
+  const podCastUser = await PodcastUser.findOne({
+    user: idUser
+  })
 
   try {
     const dataPodcast = await Podcast.findByIdAndDelete({
@@ -175,6 +298,14 @@ const deletePodcastById = asyncHandler(async (req: Request, res: Response) => {
     });
 
     if (dataPodcast) {
+      if (!podCastUser.podcasts.includes(idPodcast)) {
+        return res.status(400)
+        .json({
+          status_code: 400,
+          message: "You can delete this pod cast"
+        }) 
+      }
+
       await dataPodcast.remove();
 
       await PodcastUser.updateOne(
@@ -186,38 +317,36 @@ const deletePodcastById = asyncHandler(async (req: Request, res: Response) => {
         }
       );
 
-      res.json({ message: "Delete podcast successfully" });
+      res.json({ status_code: 200, message: "Delete podcast successfully" });
     } else {
-      res.status(500).json("Can't find Podcast to delete");
+      res.status(404).json({
+        status_code: 404,
+        message: "Not Found"
+      });
     }
   } catch (error) {
     res.status(500).json(error);
   }
 });
-const likePost = asyncHandler(async (req: Request, res: Response) => {
-  const likeId = req.body.likeId;
-  const idPost = req.body.idPost;
+
+const likePost = asyncHandler(async (req: IUserReq, res: Response) => {
+  const userId = req.user.id;
+  const idPost = req.params.id;
 
   try {
     const podcast = await Podcast.findOne({ _id: idPost });
     const UserLikePodcast = await StatusPost.findOne({
-      userLikePost: likeId,
+      userLikePost: userId,
       post: idPost,
     });
 
     if (!podcast) {
-      return res.status(404).json({ message: "Không tìm thấy Podcast" });
-    }
-
-    if (!likeId) {
-      return res
-        .status(400)
-        .json({ message: "Thiếu thông tin người thích bài viết" });
+      return res.status(404).json({ status_code: 404, message: "Not found" });
     }
 
     if (!UserLikePodcast) {
       await StatusPost.create({
-        userLikePost: likeId,
+        userLikePost: userId,
         post: idPost,
         isLike: true,
       });
@@ -227,13 +356,13 @@ const likePost = asyncHandler(async (req: Request, res: Response) => {
       { _id: idPost },
       {
         $addToSet: {
-          likes: likeId,
+          likes: userId,
         },
       }
     );
     await StatusPost.updateOne(
       {
-        userLikePost: likeId,
+        userLikePost: userId,
         post: idPost,
       },
       {
@@ -243,42 +372,37 @@ const likePost = asyncHandler(async (req: Request, res: Response) => {
       }
     );
 
-    res.status(200).json({ message: "Thích bài viết thành công" });
+    res.status(200).json({ status_code: 200, message: "Like success" });
   } catch (error) {
     console.log(error);
-    res.status(500).json(error);
+    res.status(500).json({status_code: 500, message: error});
   }
 });
 
-const unLikePost = asyncHandler(async (req: Request, res: Response) => {
-  const likeId = req.body.likeId;
-  const idPost = req.body.idPost;
+const unLikePost = asyncHandler(async (req: IUserReq, res: Response) => {
+  const userId = req.user.id;
+  const idPost = req.params.id;
 
   try {
     const podcast = await Podcast.findOne({ _id: idPost });
 
     if (!podcast) {
-      return res.status(404).json({ message: "Không tìm thấy Podcast" });
+      return res.status(404).json({ status_code: 404, message: "Not found" });
     }
 
-    if (!likeId) {
-      return res
-        .status(400)
-        .json({ message: "Thiếu thông tin người thích bài viết" });
-    }
     // remove id of people like post to db
 
     await Podcast.updateOne(
       { _id: idPost },
       {
         $pull: {
-          likes: likeId,
+          likes: userId,
         },
       }
     );
     await StatusPost.updateOne(
       {
-        userLikePost: likeId,
+        userLikePost: userId,
         post: idPost,
       },
       {
@@ -288,35 +412,13 @@ const unLikePost = asyncHandler(async (req: Request, res: Response) => {
       }
     );
 
-    res.status(200).json({ message: "Bỏ Thích bài viết thành công" });
+    res.status(200).json({ status_code: 200, message: "Unlike success" });
   } catch (error) {
     console.log(error);
-    res.status(500).json(error);
+    res.status(500).json({ status_code: 500, message: error});
   }
 });
 
-const getStatusLikePost = asyncHandler(async (req: Request, res: Response) => {
-  const likeId = req.query.likeId;
-  const postOwner = req.query.postOwner;
-
-  const statusPost = await StatusPost.findOne({
-    userLikePost: likeId,
-    post: postOwner,
-  });
-  try {
-    if (!statusPost) {
-      return res.json(false);
-    }
-
-    res.json({
-      isLike: statusPost.isLike,
-      postOwner: statusPost.post,
-    });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json(error);
-  }
-});
 
 const commentPost = asyncHandler(async (req: Request, res: Response) => {
   const now = new Date();
@@ -364,27 +466,9 @@ const getCommentPost = asyncHandler(async (req: Request, res: Response) => {
   }
 });
 
-const getTotalLikeCount = asyncHandler(async (req: Request, res: Response) => {
-  const idPost = req.query.idPost;
 
-  try {
-    const podcastData = await Podcast.findOne({
-      _id: idPost,
-    });
-
-    if (podcastData) {
-      res.status(200).json({
-        likes: podcastData.likes,
-      });
-    } else {
-      res.status(404).json("Cant find Podcast");
-    }
-  } catch (error) {
-    console.log(error);
-    res.status(500).json(error);
-  }
-});
 export {
+  createPodcast,
   getAllPodcastByUserId,
   getPodcastFollowingUser,
   getDetailPodcast,
@@ -393,8 +477,6 @@ export {
   getRecommendPodcasts,
   likePost,
   unLikePost,
-  getStatusLikePost,
   commentPost,
   getCommentPost,
-  getTotalLikeCount,
 };

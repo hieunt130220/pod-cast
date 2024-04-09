@@ -7,12 +7,20 @@ import {
   getRecommendPodcasts,
   likePost,
   unLikePost,
-  getStatusLikePost,
   commentPost,
   getCommentPost,
-  getTotalLikeCount,
+  createPodcast
 } from "../../controllers/data/podcastController";
 const router = require("express").Router();
+const multer = require("multer");
+const { storagePodcast } = require("../../config/cloudinary");
+const uploadAudio = multer({ storage: storagePodcast });
+
+router.route("").post(uploadAudio.fields([
+    { name: "file", maxCount: 1 },
+    { name: "background", maxCount: 1 },
+  ]), createPodcast);
+
 
 // get All podcast by user id
 router.route("/user/:id")

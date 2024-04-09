@@ -45,15 +45,7 @@ const UserSchema = new mongoose.Schema(
     ],
     bio: {
       type: String,
-    },
-    secretQuestion: {
-      type: String,
-      required: true,
-    },
-    secretAnswer: {
-      type: String,
-      required: true,
-    },
+    }
   },
   { timestamps: true }
 );
