@@ -420,18 +420,18 @@ const unLikePost = asyncHandler(async (req: IUserReq, res: Response) => {
 });
 
 
-const commentPost = asyncHandler(async (req: Request, res: Response) => {
+const commentPost = asyncHandler(async (req: IUserReq, res: Response) => {
   const now = new Date();
   const uploadDate = now.toISOString();
-  const podcast = await Podcast.findById(req.body.postId);
+  const podcast = await Podcast.findById(req.params.id);
   try {
     if (!podcast) {
-      return res.status(404).json({ message: "Bài podcast không tồn tại" });
+      return res.status(404).json({ status_code: 400, message: "Not found" });
     }
 
     const comment = {
-      user: req.body.userId,
-      text: req.body.text,
+      user: req.user.id,
+      text: req.body.comment,
       date: new Date(),
     };
 
@@ -439,7 +439,7 @@ const commentPost = asyncHandler(async (req: Request, res: Response) => {
     await podcast.save();
 
     res.status(200).json({
-      message: "comment succesful",
+      data: comment,
     });
   } catch (error) {
     console.log(error);
@@ -448,17 +448,17 @@ const commentPost = asyncHandler(async (req: Request, res: Response) => {
 });
 
 const getCommentPost = asyncHandler(async (req: Request, res: Response) => {
-  const postId = req.query.postId;
+  const postId = req.params.id;
   try {
     const podcast = await Podcast.findOne(
       { _id: postId },
       {
         comments: 1,
       }
-    ).populate("comments.user");
+    ).populate("comments.user", "username avatar");
 
     res.status(200).json({
-      userComments: podcast.comments,
+      data: podcast.comments,
     });
   } catch (error) {
     console.log(error);
