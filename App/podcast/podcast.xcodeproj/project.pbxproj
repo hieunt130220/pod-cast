@@ -15,6 +15,9 @@
 		EAEB1AF12BCD2A9E00FE5298 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EAEB1AF02BCD2A9E00FE5298 /* Assets.xcassets */; };
 		EAEB1AF42BCD2A9E00FE5298 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EAEB1AF22BCD2A9E00FE5298 /* LaunchScreen.storyboard */; };
 		EAEB1AFE2BCD2B8000FE5298 /* SirocroAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAEB1AFC2BCD2B8000FE5298 /* SirocroAPI.swift */; };
+		EAEB1B052BCD319100FE5298 /* AuthRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAEB1B042BCD319100FE5298 /* AuthRepository.swift */; };
+		EAEB1B072BCD319B00FE5298 /* UserRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAEB1B062BCD319B00FE5298 /* UserRepository.swift */; };
+		EAEB1B092BCD31A800FE5298 /* PodCastRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAEB1B082BCD31A800FE5298 /* PodCastRepository.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +33,9 @@
 		EAEB1AF32BCD2A9E00FE5298 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		EAEB1AF52BCD2A9E00FE5298 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EAEB1AFC2BCD2B8000FE5298 /* SirocroAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SirocroAPI.swift; sourceTree = "<group>"; };
+		EAEB1B042BCD319100FE5298 /* AuthRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthRepository.swift; sourceTree = "<group>"; };
+		EAEB1B062BCD319B00FE5298 /* UserRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRepository.swift; sourceTree = "<group>"; };
+		EAEB1B082BCD31A800FE5298 /* PodCastRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodCastRepository.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -122,6 +128,9 @@
 		EAEB1B022BCD30E900FE5298 /* Repository */ = {
 			isa = PBXGroup;
 			children = (
+				EAEB1B042BCD319100FE5298 /* AuthRepository.swift */,
+				EAEB1B062BCD319B00FE5298 /* UserRepository.swift */,
+				EAEB1B082BCD31A800FE5298 /* PodCastRepository.swift */,
 			);
 			path = Repository;
 			sourceTree = "<group>";
@@ -243,8 +252,11 @@
 			files = (
 				EAEB1AEC2BCD2A9B00FE5298 /* ViewController.swift in Sources */,
 				EAEB1AE82BCD2A9B00FE5298 /* AppDelegate.swift in Sources */,
+				EAEB1B072BCD319B00FE5298 /* UserRepository.swift in Sources */,
 				EAEB1AFE2BCD2B8000FE5298 /* SirocroAPI.swift in Sources */,
+				EAEB1B052BCD319100FE5298 /* AuthRepository.swift in Sources */,
 				EAEB1AEA2BCD2A9B00FE5298 /* SceneDelegate.swift in Sources */,
+				EAEB1B092BCD31A800FE5298 /* PodCastRepository.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
