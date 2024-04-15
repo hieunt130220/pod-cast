@@ -82,6 +82,9 @@
 		EAEB1AE62BCD2A9B00FE5298 /* podcast */ = {
 			isa = PBXGroup;
 			children = (
+				EAEB1B022BCD30E900FE5298 /* Repository */,
+				EAEB1B012BCD30E400FE5298 /* Model */,
+				EAEB1B002BCD30DE00FE5298 /* Screen */,
 				EAEB1AFB2BCD2B8000FE5298 /* API */,
 				EAEB1AE72BCD2A9B00FE5298 /* AppDelegate.swift */,
 				EAEB1AE92BCD2A9B00FE5298 /* SceneDelegate.swift */,
@@ -100,6 +103,27 @@
 				EAEB1AFC2BCD2B8000FE5298 /* SirocroAPI.swift */,
 			);
 			path = API;
+			sourceTree = "<group>";
+		};
+		EAEB1B002BCD30DE00FE5298 /* Screen */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Screen;
+			sourceTree = "<group>";
+		};
+		EAEB1B012BCD30E400FE5298 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		EAEB1B022BCD30E900FE5298 /* Repository */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Repository;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
