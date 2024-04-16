@@ -1,10 +1,3 @@
-//
-//  SirocroAPI.swift
-//  sirocro
-//
-//  Created by 柳田昌弘 on 2021/03/15.
-//
-
 import UIKit
 import CoreLocation
 import Moya
@@ -13,6 +6,7 @@ import URLNavigator
 import SwiftyJSON
 
 enum StatusCode: Int {
+    case success = 200
     case badRequest = 400
     case unauthorized = 401
     case notFound = 404
@@ -20,55 +14,80 @@ enum StatusCode: Int {
     case serviceUnavailable = 500
 }
 
-enum SirocroAPI {
-    
+enum APIRouter {
+    case register(params: SignupRequest)
+    case login(params: SigninRequest)
+    case changePassword(params: ChangePasswordRequest)
 }
 
-extension SirocroAPI: TargetType {
+extension APIRouter: TargetType {
     var headers: [String: String]? {
         var headers: [String: String] = [:]
+        let token = LocalData.shared.token
+        if !token.isEmpty {
+            headers["Authorization"] = "Bearer \(token)"
+        }
         return headers
     }
-    var apiVersion: String {
-        return "api/v1"
-    }
+    
     var baseURL: URL {
-        let baseURL = ""
+        let baseURL = "http://localhost:8080/api"
         return URL(string: baseURL)!
     }
     var path: String {
-        return ""
+        switch self {
+        case .register:
+            return "/auth/register"
+        case .login:
+            return "/auth/login"
+        case .changePassword:
+            return "/auth/change_password"
+        }
     }
     var method: Moya.Method {
-        return .get
+        switch self {
+        case .login,
+                .changePassword,
+                .register:
+            return .post
+        }
     }
     var parameters: [String: Any]? {
-        return [:]
+        switch self {
+        case .register(let params):
+            return params.dictionary
+        case .login(let params):
+            return params.dictionary
+        case .changePassword(let params):
+            return params.dictionary
+        }
     }
-    var sampleData: Data {
-        return Data()
-    }
+
     var task: Moya.Task {
-        return .requestPlain
+        if let parameters = self.parameters {
+            return .requestParameters(parameters: parameters, encoding: self.parameterEncoding)
+        } else {
+            return .requestPlain
+        }
     }
     var multipartBody: [Moya.MultipartFormData]? {
         return nil
     }
     var parameterEncoding: Moya.ParameterEncoding {
-        return URLEncoding.default
+        return JSONEncoding.default
     }
 }
 
-struct SirocroNetwork {
+struct API {
     static let queue = DispatchQueue(label: "com.actvn.hieunt.podcast.request", attributes: .concurrent)
     static let plugins: [PluginType] = [
         NetworkLoggerPlugin(configuration: NetworkLoggerPlugin.Configuration())
     ]
-    static var provider = MoyaProvider<SirocroAPI>(
+    static var provider = MoyaProvider<APIRouter>(
         plugins: plugins
     )
     
-    static func request(target: SirocroAPI,
+    static func request(target: APIRouter,
                         success successCallback: @escaping (_ json: JSON?, _ allHeaderFields: [AnyHashable : Any]?) -> Void,
                         progress progressCallback: ((_ value: Double) -> Void)? = nil,
                         error errorCallback: @escaping (_ statusCode: Int) -> Void,
@@ -96,10 +115,8 @@ struct SirocroNetwork {
                     case .statusCode(let response):
                         if let statusCode = StatusCode(rawValue: response.statusCode) {
                             switch statusCode {
-                            case .unauthorized, .forbidden:
-                                break
-                            case .serviceUnavailable:
-                                break
+                            case .unauthorized:
+                                LocalData.shared.token = ""
                             default:
                                 DispatchQueue.main.async {
                                     errorCallback(statusCode.rawValue)

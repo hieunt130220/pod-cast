@@ -20,8 +20,8 @@ const getMe = asyncHandler(async (req: IUserReq, res: Response) => {
         username: user.username,
         email: user.email,
         avatar: user.avatar,
-        followers: user.followers,
-        following: user.following,
+        followers: user.followers.length,
+        followings: user.following.length,
       }
     });
   } else {
@@ -118,8 +118,8 @@ const getOtherUserProfile = asyncHandler(async (req: IUserReq, res: Response) =>
           _id: infoUser.user.id,
           username: infoUser.user.username,
           avatar: infoUser.user.avatar,
-          followers: infoUser.user.followers,
-          followings: infoUser.user.following,
+          followers: infoUser.user.followers.length,
+          followings: infoUser.user.following.length,
           is_following: infoUser.following,
           is_followed: infoUser.followed_by
         }

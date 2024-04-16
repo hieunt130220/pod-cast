@@ -13,4 +13,5 @@ target 'podcast' do
   pod 'Moya'
   pod 'Alamofire', '~> 5.2'
   pod 'SwiftyJSON'
+  pod 'ObjectMapper'
 end

@@ -6,20 +6,21 @@ const generateToken = require("../../utils/generateToken");
 const bcrypt = require("bcryptjs");
 const saltRounds = 10;
 
+interface IUserReq extends Request {
+  user?: any;
+}
+
 const loginUser = asyncHandler(async (req: Request, res: Response) => {
   const { email, password } = req.body;
 
   const user = await User.findOne({ email });
   if (user && (await user.matchPassword(password))) {
-    res.json({
-      _id: user._id,
-      username: user.username,
-      email: user.email,
-      avatar: user.avatar,
-      addressDefault: user.addressDefault,
-      roleId: user.roleId,
-      role: user.role,
-      token: generateToken(user._id),
+    res.status(200).json({
+      data: {
+        token: generateToken(user.id)
+      },
+      status_code: 200,
+      message: "Login success"
     });
   } else {
     res.status(401).json({
@@ -30,7 +31,7 @@ const loginUser = asyncHandler(async (req: Request, res: Response) => {
 });
 
 const registerUser = asyncHandler(async (req: Request, res: Response) => {
-  const { username, email, password, secretQuestion, secretAnswer } = req.body;
+  const { username, email, password } = req.body;
 
   const emailExits = await User.findOne({ email });
 
@@ -46,84 +47,67 @@ const registerUser = asyncHandler(async (req: Request, res: Response) => {
   const user = await User.create({
     username,
     email,
-    password,
-    secretQuestion,
-    secretAnswer,
+    password
   });
   if (user) {
-    res.status(201).json({
-      _id: user._id,
-      username: user.username,
-      email: user.email,
-      avatar: user.avatar,
-      roleId: user.roleId,
-      role: user.role,
-      token: generateToken(user._id),
-      secretQuestion: user.secretQuestion,
-      secretKey: user.secretAnswer,
+    res.status(200).json({
+      data: {
+        token: generateToken(user.id)
+      },
+      status_code: 200,
+      message: "Create account success"
     });
   } else {
-    res.status(401);
-    throw new Error("Invalid user data");
+    res.status(401).json({
+      status_code: 401,
+      message: "Invalid data"
+    })
   }
 });
 
-const getConfirmationUser = asyncHandler(
-  async (req: Request, res: Response) => {
-    const { email, secretQuestion, secretAnswer } = req.query;
+const changePasswordUser = asyncHandler(async (req: IUserReq, res: Response) => {
+  const { oldPassword, newPassword } = req.body;
 
-    const user = await User.findOne({ email });
-    try {
-      if (!user) {
-        res.status(404).json({ message: "Can't find account!" });
-      }
+  const user = req.user;
 
-      if (
-        secretQuestion === user.secretQuestion &&
-        secretAnswer === user.secretAnswer
-      ) {
-        res.status(200).json({
-          message: "Verified information!",
-          idUser: user._id,
-        });
-      } else {
-        res.status(404).json({ message: "Incorrect information!" });
-      }
-    } catch (error) {
-      res.status(500).json(error);
-    }
-  }
-);
-
-const changePasswordUser = asyncHandler(async (req: Request, res: Response) => {
-  const { idUser, newPassword } = req.body;  
-  const user = await User.findOne({ _id: idUser });
   try {
     if (!user) {
-      res.status(404).json({ message: "Can't find account!" });
-    }
-
-    const newPasswordHash = await bcrypt.hash(newPassword, saltRounds);
-
-    if (newPasswordHash) {
-      await User.updateOne(
-        {
-          _id: idUser,
-        },
-        {
-          $set: {
-            password: newPasswordHash,
-          },
-        }
-      );
-
-      res.status(200).json({
-        message: "Change password successful!",
+      res.status(404).json({
+        status_code: 404,
+        message: "Can't find account!"
       });
     }
+    if (await user.matchPassword(oldPassword)) {
+      const newPasswordHash = await bcrypt.hash(newPassword, saltRounds);
+
+      if (newPasswordHash) {
+        await User.updateOne(
+          {
+            _id: user.id,
+          },
+          {
+            $set: {
+              password: newPasswordHash,
+            },
+          }
+        );
+
+        res.status(200).json({
+          status_code: 200,
+          message: "Change password successful!",
+        });
+      }
+    } else {
+      res.status(404).json({
+        status_code: 404,
+        message: "Old password incorrect"
+      })
+
+    }
   } catch (error) {
+    console.log(error)
     res.status(500).json(error);
   }
 });
 
-export { registerUser, loginUser, getConfirmationUser, changePasswordUser };
+export { registerUser, loginUser, changePasswordUser };

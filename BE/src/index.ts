@@ -11,15 +11,14 @@ const userRoute = require("./routes/users/userRoute");
 const app: Application = express();
 const PORT = process.env.port || 8080;
 import verify from "../src/middleware/tokenMiddleware";
-
+const bodyParser = require('body-parser')
 connectDB();
 
 // middleware apply cors and all request
 app.use(express.json());
 app.use(cors());
-
 app.set("trust proxy", 1);
-
+app.use(bodyParser.json())
 //routes
 
 app.use("/api/auth", authRoute);

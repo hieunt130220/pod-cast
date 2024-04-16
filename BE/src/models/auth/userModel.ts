@@ -8,15 +8,10 @@ const UserSchema = new mongoose.Schema(
     email: { type: String, unique: true },
     password: { type: String },
     phone: { type: String },
-    googleID: { type: String },
     avatar: {
       type: String,
       default:
         "https://i.pinimg.com/564x/ac/29/ae/ac29aedf348f1409f49d53013f72c276.jpg",
-    },
-    addressDefault: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Address",
     },
     roleId: {
       type: mongoose.Schema.Types.ObjectId,
@@ -45,6 +40,7 @@ const UserSchema = new mongoose.Schema(
     ],
     bio: {
       type: String,
+      default: ""
     }
   },
   { timestamps: true }
