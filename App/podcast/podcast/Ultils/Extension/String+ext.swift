@@ -26,7 +26,7 @@ extension String {
             case .email:
                 return "^[\\w-\\.+]+@([\\w-]+\\.)+[\\w-]+$"
             case .password:
-                return "^[a-zA-Z0-9]{8,}$"
+                return "^[a-zA-Z0-9]{8,16}$"
             case .username:
                 return "^[a-zA-Z0-9._]{3,16}$"
             }

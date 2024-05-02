@@ -49,7 +49,7 @@ class LoginViewController: UIViewController {
             Constants.sceneDelegate?.appNavigator?.switchToMain()
         } failure: { error, statusCode in
             if statusCode == StatusCode.unauthorized.rawValue {
-                self.showMessage("Email or password not correct")
+                self.showMessage("Email or password is not correct")
             }
             self.view.activityIndicatorView.stopAnimating()
         }

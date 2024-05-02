@@ -8,7 +8,9 @@
 import UIKit
 import Toast_Swift
 extension UIViewController {
-    func showMessage(_ msg: String) {
-        view.makeToast(msg, duration: 2)
+    func showMessage(_ msg: String, completion: (() -> Void)? = nil) {
+        view.makeToast(msg, duration: 2, completion: {
+            completion?()
+        })
     }
 }

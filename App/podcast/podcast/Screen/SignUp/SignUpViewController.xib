@@ -10,6 +10,9 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SignUpViewController" customModule="podcast" customModuleProvider="target">
             <connections>
+                <outlet property="emailTf" destination="4sj-PP-7l5" id="aaD-sN-y0O"/>
+                <outlet property="passwordTf" destination="1S7-b0-uhP" id="5RT-Ft-fV1"/>
+                <outlet property="userNameTf" destination="4sj-PP-7l5" id="CgA-9l-yTS"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -95,6 +98,9 @@
                                             <real key="value" value="24"/>
                                         </userDefinedRuntimeAttribute>
                                     </userDefinedRuntimeAttributes>
+                                    <connections>
+                                        <action selector="tapRegister:" destination="-1" eventType="touchUpInside" id="jH6-EP-vTO"/>
+                                    </connections>
                                 </button>
                             </subviews>
                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
