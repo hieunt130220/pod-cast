@@ -8,6 +8,18 @@
 
 /* Begin PBXBuildFile section */
 		3124CA41581989B28C439319 /* Pods_podcast.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 404BDE81FA649E8A9A7747AA /* Pods_podcast.framework */; };
+		EA2CC56D2BE3268800B8CEA6 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA2CC56B2BE3268800B8CEA6 /* LoginViewController.swift */; };
+		EA2CC56E2BE3268800B8CEA6 /* LoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = EA2CC56C2BE3268800B8CEA6 /* LoginViewController.xib */; };
+		EA2CC5702BE38D0300B8CEA6 /* AppNavigator.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA2CC56F2BE38D0300B8CEA6 /* AppNavigator.swift */; };
+		EA2CC5722BE3901900B8CEA6 /* UIView+ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA2CC5712BE3901900B8CEA6 /* UIView+ext.swift */; };
+		EA2CC5742BE3938C00B8CEA6 /* UIViewController+ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA2CC5732BE3938C00B8CEA6 /* UIViewController+ext.swift */; };
+		EA2CC5762BE3969900B8CEA6 /* String+ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA2CC5752BE3969900B8CEA6 /* String+ext.swift */; };
+		EA2CC5782BE398C900B8CEA6 /* AppRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA2CC5772BE398C900B8CEA6 /* AppRepository.swift */; };
+		EA2CC57A2BE39AD700B8CEA6 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA2CC5792BE39AD700B8CEA6 /* Constants.swift */; };
+		EA2CC57E2BE39D1D00B8CEA6 /* MainTabbarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA2CC57C2BE39D1D00B8CEA6 /* MainTabbarViewController.swift */; };
+		EA2CC57F2BE39D1D00B8CEA6 /* MainTabbarViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = EA2CC57D2BE39D1D00B8CEA6 /* MainTabbarViewController.xib */; };
+		EA2CC5832BE3A04800B8CEA6 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA2CC5812BE3A04800B8CEA6 /* SignUpViewController.swift */; };
+		EA2CC5842BE3A04800B8CEA6 /* SignUpViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = EA2CC5822BE3A04800B8CEA6 /* SignUpViewController.xib */; };
 		EAEB1AE82BCD2A9B00FE5298 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAEB1AE72BCD2A9B00FE5298 /* AppDelegate.swift */; };
 		EAEB1AEA2BCD2A9B00FE5298 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAEB1AE92BCD2A9B00FE5298 /* SceneDelegate.swift */; };
 		EAEB1AEC2BCD2A9B00FE5298 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAEB1AEB2BCD2A9B00FE5298 /* ViewController.swift */; };
@@ -28,6 +40,18 @@
 		404BDE81FA649E8A9A7747AA /* Pods_podcast.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_podcast.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		89C8349EE09C46F31DDEB646 /* Pods-podcast.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-podcast.release.xcconfig"; path = "Target Support Files/Pods-podcast/Pods-podcast.release.xcconfig"; sourceTree = "<group>"; };
 		BF202057BDA848EA230612E7 /* Pods-podcast.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-podcast.debug.xcconfig"; path = "Target Support Files/Pods-podcast/Pods-podcast.debug.xcconfig"; sourceTree = "<group>"; };
+		EA2CC56B2BE3268800B8CEA6 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		EA2CC56C2BE3268800B8CEA6 /* LoginViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LoginViewController.xib; sourceTree = "<group>"; };
+		EA2CC56F2BE38D0300B8CEA6 /* AppNavigator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppNavigator.swift; sourceTree = "<group>"; };
+		EA2CC5712BE3901900B8CEA6 /* UIView+ext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+ext.swift"; sourceTree = "<group>"; };
+		EA2CC5732BE3938C00B8CEA6 /* UIViewController+ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+ext.swift"; sourceTree = "<group>"; };
+		EA2CC5752BE3969900B8CEA6 /* String+ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+ext.swift"; sourceTree = "<group>"; };
+		EA2CC5772BE398C900B8CEA6 /* AppRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRepository.swift; sourceTree = "<group>"; };
+		EA2CC5792BE39AD700B8CEA6 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		EA2CC57C2BE39D1D00B8CEA6 /* MainTabbarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabbarViewController.swift; sourceTree = "<group>"; };
+		EA2CC57D2BE39D1D00B8CEA6 /* MainTabbarViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainTabbarViewController.xib; sourceTree = "<group>"; };
+		EA2CC5812BE3A04800B8CEA6 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
+		EA2CC5822BE3A04800B8CEA6 /* SignUpViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SignUpViewController.xib; sourceTree = "<group>"; };
 		EAEB1AE42BCD2A9B00FE5298 /* podcast.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = podcast.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EAEB1AE72BCD2A9B00FE5298 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		EAEB1AE92BCD2A9B00FE5298 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -75,6 +99,33 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		EA2CC56A2BE3266000B8CEA6 /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				EA2CC56B2BE3268800B8CEA6 /* LoginViewController.swift */,
+				EA2CC56C2BE3268800B8CEA6 /* LoginViewController.xib */,
+			);
+			path = Login;
+			sourceTree = "<group>";
+		};
+		EA2CC57B2BE39D0800B8CEA6 /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				EA2CC57C2BE39D1D00B8CEA6 /* MainTabbarViewController.swift */,
+				EA2CC57D2BE39D1D00B8CEA6 /* MainTabbarViewController.xib */,
+			);
+			path = Main;
+			sourceTree = "<group>";
+		};
+		EA2CC5802BE3A03400B8CEA6 /* SignUp */ = {
+			isa = PBXGroup;
+			children = (
+				EA2CC5812BE3A04800B8CEA6 /* SignUpViewController.swift */,
+				EA2CC5822BE3A04800B8CEA6 /* SignUpViewController.xib */,
+			);
+			path = SignUp;
+			sourceTree = "<group>";
+		};
 		EAEB1ADB2BCD2A9B00FE5298 = {
 			isa = PBXGroup;
 			children = (
@@ -96,7 +147,7 @@
 		EAEB1AE62BCD2A9B00FE5298 /* podcast */ = {
 			isa = PBXGroup;
 			children = (
-				EAEB1B0C2BCE0EB400FE5298 /* Helper */,
+				EAEB1B0C2BCE0EB400FE5298 /* Ultils */,
 				EAEB1B022BCD30E900FE5298 /* Repository */,
 				EAEB1B012BCD30E400FE5298 /* Model */,
 				EAEB1B002BCD30DE00FE5298 /* Screen */,
@@ -123,6 +174,9 @@
 		EAEB1B002BCD30DE00FE5298 /* Screen */ = {
 			isa = PBXGroup;
 			children = (
+				EA2CC5802BE3A03400B8CEA6 /* SignUp */,
+				EA2CC57B2BE39D0800B8CEA6 /* Main */,
+				EA2CC56A2BE3266000B8CEA6 /* Login */,
 			);
 			path = Screen;
 			sourceTree = "<group>";
@@ -143,22 +197,28 @@
 				EAEB1B062BCD319B00FE5298 /* UserRepository.swift */,
 				EAEB1B082BCD31A800FE5298 /* PodCastRepository.swift */,
 				EAEB1B142BCE688100FE5298 /* LocalData.swift */,
+				EA2CC5772BE398C900B8CEA6 /* AppRepository.swift */,
 			);
 			path = Repository;
 			sourceTree = "<group>";
 		};
-		EAEB1B0C2BCE0EB400FE5298 /* Helper */ = {
+		EAEB1B0C2BCE0EB400FE5298 /* Ultils */ = {
 			isa = PBXGroup;
 			children = (
+				EA2CC56F2BE38D0300B8CEA6 /* AppNavigator.swift */,
+				EA2CC5792BE39AD700B8CEA6 /* Constants.swift */,
 				EAEB1B0D2BCE0EC100FE5298 /* Extension */,
 			);
-			path = Helper;
+			path = Ultils;
 			sourceTree = "<group>";
 		};
 		EAEB1B0D2BCE0EC100FE5298 /* Extension */ = {
 			isa = PBXGroup;
 			children = (
+				EA2CC5712BE3901900B8CEA6 /* UIView+ext.swift */,
 				EAEB1B0E2BCE0ED200FE5298 /* Codable+ext.swift */,
+				EA2CC5732BE3938C00B8CEA6 /* UIViewController+ext.swift */,
+				EA2CC5752BE3969900B8CEA6 /* String+ext.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -223,8 +283,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EA2CC57F2BE39D1D00B8CEA6 /* MainTabbarViewController.xib in Resources */,
+				EA2CC56E2BE3268800B8CEA6 /* LoginViewController.xib in Resources */,
 				EAEB1AF42BCD2A9E00FE5298 /* LaunchScreen.storyboard in Resources */,
 				EAEB1AF12BCD2A9E00FE5298 /* Assets.xcassets in Resources */,
+				EA2CC5842BE3A04800B8CEA6 /* SignUpViewController.xib in Resources */,
 				EAEB1AEF2BCD2A9B00FE5298 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -278,17 +341,26 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EA2CC56D2BE3268800B8CEA6 /* LoginViewController.swift in Sources */,
 				EAEB1AEC2BCD2A9B00FE5298 /* ViewController.swift in Sources */,
 				EAEB1AE82BCD2A9B00FE5298 /* AppDelegate.swift in Sources */,
+				EA2CC5742BE3938C00B8CEA6 /* UIViewController+ext.swift in Sources */,
+				EA2CC5722BE3901900B8CEA6 /* UIView+ext.swift in Sources */,
 				EAEB1B072BCD319B00FE5298 /* UserRepository.swift in Sources */,
 				EAEB1B0F2BCE0ED200FE5298 /* Codable+ext.swift in Sources */,
 				EAEB1AFE2BCD2B8000FE5298 /* API.swift in Sources */,
 				EAEB1B052BCD319100FE5298 /* AuthRepository.swift in Sources */,
 				EAEB1B0B2BCE0DC400FE5298 /* Auth.swift in Sources */,
+				EA2CC5782BE398C900B8CEA6 /* AppRepository.swift in Sources */,
 				EAEB1AEA2BCD2A9B00FE5298 /* SceneDelegate.swift in Sources */,
+				EA2CC57E2BE39D1D00B8CEA6 /* MainTabbarViewController.swift in Sources */,
+				EA2CC5702BE38D0300B8CEA6 /* AppNavigator.swift in Sources */,
+				EA2CC5832BE3A04800B8CEA6 /* SignUpViewController.swift in Sources */,
 				EAEB1B112BCE121B00FE5298 /* User.swift in Sources */,
 				EAEB1B152BCE688100FE5298 /* LocalData.swift in Sources */,
+				EA2CC5762BE3969900B8CEA6 /* String+ext.swift in Sources */,
 				EAEB1B092BCD31A800FE5298 /* PodCastRepository.swift in Sources */,
+				EA2CC57A2BE39AD700B8CEA6 /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -442,6 +514,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = XYXUS3QG9G;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = podcast/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Podcast;
@@ -474,6 +550,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = XYXUS3QG9G;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = podcast/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Podcast;

@@ -1,0 +1,46 @@
+{
+  "user_data": {
+    "disp_user_id": "xxxxx"
+  },
+  "events": [
+    {
+      "event_id": 5000001,
+      "tour_name": "xxツアー",
+      "event_name": "xx公演",
+      "event_start_date": "2024-01-01",
+      "event_start_time": "18:00:00",
+      "doors_opent_time": "17:00:00",
+      "artist_name": "アーティストA",
+      "venue_name": "日本武道館",
+      "seat_info_publish_start": "2024-01-01 16:00:00",
+      "seat_info_publish_end": "2024-01-01 19:00:00",
+      "tickets": [
+        {
+          "ticket_display_order": 1,
+          "ticket_id": 100,
+          "ticket_type": "一般",
+          "seat_type": "S席",
+          "doorway": "Aゲート",
+          "area": "アリーナA",
+          "hallway": "1通路",
+          "floor": "1階",
+          "column": "1列",
+          "number": "13番"
+        },
+        {
+          "ticket_display_order": 2,
+          "ticket_id": 101,
+          "ticket_type": "一般",
+          "seat_type": "S席",
+          "doorway": "Aゲート",
+          "area": "アリーナA",
+          "hallway": "1通路",
+          "floor": "1階",
+          "column": "1列",
+          "number": "14番"
+        }
+      ]
+    }
+  ],
+  "retrieved_at": "2024-01-01 14:29:05"
+}

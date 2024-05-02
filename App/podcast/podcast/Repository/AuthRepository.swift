@@ -9,11 +9,11 @@ import Foundation
 
 class AuthRepository {
     
-    func register(params: SignupRequest, completion: @escaping(_ success: Bool) -> Void,
+    func register(params: SignupRequest, completion: @escaping(_ token: String) -> Void,
                   failure: @escaping(_ error: Error?, _ statusCode: Int?) -> Void) {
         _ = API.request(target: .register(params: params), success: { json, allHeaderFields in
-            if let token = json?["data"]["token"] {
-                completion(true)
+            if let token = json?["data"]["token"] as? String {
+                completion(token)
             }
         }, error: { statusCode in
             failure(nil, statusCode)
@@ -22,11 +22,11 @@ class AuthRepository {
         })
     }
     
-    func login(params: SigninRequest, completion: @escaping(_ success: Bool) -> Void,
+    func login(params: SigninRequest, completion: @escaping(_ token: String) -> Void,
                   failure: @escaping(_ error: Error?, _ statusCode: Int?) -> Void) {
         _ = API.request(target: .login(params: params), success: { json, allHeaderFields in
-            if let token = json?["data"]["token"] {
-                completion(true)
+            if let token = json?["data"]["token"].string {
+                completion(token)
             }
         }, error: { statusCode in
             failure(nil, statusCode)

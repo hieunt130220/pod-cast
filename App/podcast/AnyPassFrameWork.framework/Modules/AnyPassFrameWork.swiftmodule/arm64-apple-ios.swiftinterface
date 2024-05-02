@@ -1,0 +1,115 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 5.9 (swiftlang-5.9.0.128.108 clang-1500.0.40.1)
+// swift-module-flags: -target arm64-apple-ios11.0 -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -Onone -module-name AnyPassFrameWork
+// swift-module-flags-ignorable: -enable-bare-slash-regex
+@_exported import AnyPassFrameWork
+import CoreImage.CIFilterBuiltins
+import Compression
+import CoreImage
+import Foundation
+import MessageUI
+import Swift
+import SystemConfiguration
+import UIKit
+import WebKit
+import _Concurrency
+import _StringProcessing
+import _SwiftConcurrencyShims
+import os
+import zlib
+@objc public protocol AnyPassAuthDelegate {
+  @objc func didAuthSuccess(code: Swift.String, message: Swift.String, raw_data: Swift.String)
+  @objc func didAuthFailure(code: Swift.String, message: Swift.String, raw_data: Swift.String)
+  @objc func onShowFailed(code: Swift.String, message: Swift.String)
+  @objc func onSyncEventFailed(code: Swift.String, message: Swift.String)
+}
+extension Swift.String {
+  public var idnaEncoded: Swift.String? {
+    get
+  }
+  public var idnaDecoded: Swift.String? {
+    get
+  }
+  public var encodedURLString: Swift.String? {
+    get
+  }
+  public var decodedURLString: Swift.String? {
+    get
+  }
+}
+extension Foundation.URL {
+  public init?(unicodeString: Swift.String)
+  public var decodedURLString: Swift.String? {
+    get
+  }
+  public init?(unicodeString: Swift.String, relativeTo url: Foundation.URL?)
+}
+public struct Random {
+  public static func generate(_ upperBound: Swift.Int) -> Swift.Int
+}
+@_hasMissingDesignatedInitializers final public class AES256CBC {
+  final public class func encryptString(_ str: Swift.String, key: Swift.String) -> Swift.String?
+  final public class func encrypt(string: Swift.String, password: Swift.String) -> (encryptedData: Foundation.Data, IV: Swift.String)?
+  final public class func decryptString(_ str: Swift.String, password: Swift.String) -> Swift.String?
+  final public class func decryptString(_ data: Foundation.Data, iv: Foundation.Data, key: Swift.String) -> Swift.String?
+  final public class func generatePassword() -> Swift.String
+  final public class func randomText(_ length: Swift.Int, justLowerCase: Swift.Bool = false, whitespace: Swift.Bool = false) -> Swift.String
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers @objc public class AnyPassResult : ObjectiveC.NSObject, Swift.Codable, Swift.Error {
+  @objc final public let code: Swift.String
+  @objc final public let message: Swift.String
+  @objc deinit
+  public func encode(to encoder: any Swift.Encoder) throws
+  required public init(from decoder: any Swift.Decoder) throws
+}
+extension AnyPassFrameWork.AnyPassResult {
+  public static let SMS_NOT_SUPPORT: AnyPassFrameWork.AnyPassResult
+  public static let UNABLE_CALL_PHONE: AnyPassFrameWork.AnyPassResult
+  public static let PERMISSION_DENIED: AnyPassFrameWork.AnyPassResult
+  public static let OK_USER_REGISTRATION: AnyPassFrameWork.AnyPassResult
+  public static let OK_USER_TRANSITION: AnyPassFrameWork.AnyPassResult
+  public static let NG_NOTHING_TRANSFERER: AnyPassFrameWork.AnyPassResult
+  public static let NG_SYSTEM_ERROR: AnyPassFrameWork.AnyPassResult
+  public static let CONFIG_MISSING_DOMAIN: AnyPassFrameWork.AnyPassResult
+  public static let USER_ID_REQUIRED: AnyPassFrameWork.AnyPassResult
+}
+@objc public class AnyPassConfig : ObjectiveC.NSObject {
+  @objc public var domainURL: Swift.String
+  @objc public var apiDomain: Swift.String
+  @objc public init(domainURL: Swift.String, apiDomain: Swift.String)
+  @objc deinit
+}
+@objc public protocol AnyPassProvider : ObjectiveC.NSObjectProtocol {
+  @objc func verifyIosSms(in viewController: UIKit.UIViewController)
+  @objc func transferAccountWithoutChangePhoneNumber(in viewController: UIKit.UIViewController)
+  @objc func transferAccountWithChangePhoneNumber(in viewController: UIKit.UIViewController)
+  @objc func setUserId(_ id: Swift.String)
+  @objc func showQR(in view: UIKit.UIView?, closeButton: Swift.Bool)
+  @objc func generateQRView(closeButton: Swift.Bool) -> AnyPassFrameWork.AnyPassQRView?
+  @objc func getAppUUID() -> Swift.String?
+  @objc func getCustomUUID() -> Swift.String?
+  @objc func setCustomUUID(_ uuid: Swift.String?)
+  @objc func closeQR()
+}
+@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @objc public class AnyPassAuthentication : ObjectiveC.NSObject, AnyPassFrameWork.AnyPassProvider {
+  @objc public static let shared: AnyPassFrameWork.AnyPassAuthentication
+  @objc public var delegate: (any AnyPassFrameWork.AnyPassAuthDelegate)?
+  @objc public var configuration: AnyPassFrameWork.AnyPassConfig
+  @objc public func configure(with config: AnyPassFrameWork.AnyPassConfig)
+  @objc public func verifyIosSms(in viewController: UIKit.UIViewController)
+  @objc public func transferAccountWithoutChangePhoneNumber(in viewController: UIKit.UIViewController)
+  @objc public func transferAccountWithChangePhoneNumber(in viewController: UIKit.UIViewController)
+  @objc public func setUserId(_ id: Swift.String)
+  @objc public func showQR(in view: UIKit.UIView?, closeButton: Swift.Bool = true)
+  @objc public func generateQRView(closeButton: Swift.Bool) -> AnyPassFrameWork.AnyPassQRView?
+  @objc public func getAppUUID() -> Swift.String?
+  @objc public func getCustomUUID() -> Swift.String?
+  @objc public func setCustomUUID(_ uuid: Swift.String?)
+  @objc public func closeQR()
+  @objc deinit
+}
+@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @objc @_Concurrency.MainActor(unsafe) public class AnyPassQRView : UIKit.UIView {
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func layoutSubviews()
+  @objc deinit
+}

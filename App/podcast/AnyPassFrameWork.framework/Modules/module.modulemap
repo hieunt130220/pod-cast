@@ -1,0 +1,11 @@
+framework module AnyPassFrameWork {
+  umbrella header "AnyPassFrameWork.h"
+  export *
+
+  module * { export * }
+}
+
+module AnyPassFrameWork.Swift {
+  header "AnyPassFrameWork-Swift.h"
+  requires objc
+}

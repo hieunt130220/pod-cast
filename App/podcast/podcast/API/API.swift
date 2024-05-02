@@ -102,11 +102,15 @@ struct API {
                 do {
                     let res = try response.filterSuccessfulStatusAndRedirectCodes()
                     if (res.statusCode >= 300) {
-                        successCallback(nil, headerFields)
+                        DispatchQueue.main.async {
+                            successCallback(nil, headerFields)
+                        }
                         return
                     }
                     let json = try JSON(response.mapJSON())
-                    successCallback(json, headerFields)
+                    DispatchQueue.main.async {
+                        successCallback(json, headerFields)
+                    }
                 } catch let error {
                     if response.statusCode == 200 {
                         successCallback(nil, headerFields)

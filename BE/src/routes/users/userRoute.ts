@@ -18,7 +18,7 @@ router
   .get(getMe)
   .put(uploadAvatar.single("avatar"), updateProfile);
 
-router.route("/recent_searches").get(searchUserByUsername);
+router.route("/search").get(searchUserByUsername);
 
 router.route("/:id").get(getOtherUserProfile);
 
