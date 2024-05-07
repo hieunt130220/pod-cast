@@ -9,7 +9,7 @@ import UIKit
 import Toast_Swift
 extension UIViewController {
     func showMessage(_ msg: String, completion: (() -> Void)? = nil) {
-        view.makeToast(msg, duration: 2, completion: {
+        view.makeToast(msg, duration: 2, completion: {didTap in 
             completion?()
         })
     }

@@ -7,7 +7,6 @@ const User = require("../../models/auth/userModel");
 const StatusPost = require("../../models/data/statusPost");
 const assemblyai = require("assemblyai-v2-node-sdk");
 const client = new assemblyai.AssemblyClient(process.env.API_SPEECH2TEXT);
-
 interface dataPodcast {
   user: string;
   audio: string;
@@ -105,15 +104,16 @@ const getAllPodcastByUserId = asyncHandler(async (req: IUserReq, res: Response) 
     const query = { user: req.params.id }
     const podcasts = await Podcast.find(query)
       .populate("user", 'username avatar')
-      .select('audio background likes comments uploadDate')
+      .select('audio caption background likes comments uploadDate')
       .skip((limit * page) - limit)
       .limit(limit)
     const promises = podcasts.map(async (item: any) => {
-      return {
+      return { 
         _id: item.id,
         user: item.user,
         audio: item.audio,
         background: item.background,
+        caption: item.caption,
         like_count: item.likes.length,
         comment_count: item.comments.length,
         is_like: item.likes.includes(req.user.id),
@@ -159,7 +159,8 @@ const getPodcastFollowingUser = asyncHandler(async (req: IUserReq, res: Response
         like_count: item.likes.length,
         comment_count: item.comments.length,
         is_like: item.likes.includes(req.user.id),
-        uploadDate: item.uploadDate
+        uploadDate: item.uploadDate,
+        caption: item.caption,
       }
     })
 

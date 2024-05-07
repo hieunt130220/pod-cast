@@ -24,7 +24,7 @@ class User: Mappable {
     }
     
     func mapping(map: ObjectMapper.Map) {
-        id <- map["_id"]
+        id <- map["id"]
         username <- map["username"]
         avatar <- map["avatar"]
         email <- map["email"]

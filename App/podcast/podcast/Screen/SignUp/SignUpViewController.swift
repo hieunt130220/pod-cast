@@ -49,7 +49,7 @@ class SignUpViewController: UIViewController {
         }
         
         view.activityIndicatorView.startAnimating()
-        AppRepository.auth.register(params: .init(username: userNameTf.text!, email: emailTf.text!, password: passwordTf.text!) { token in
+        AppRepository.auth.register(params: .init(username: userNameTf.text!, email: emailTf.text!, password: passwordTf.text!)) { token in
             self.view.activityIndicatorView.stopAnimating()
             LocalData.shared.token = token
             self.showMessage("Register success") {

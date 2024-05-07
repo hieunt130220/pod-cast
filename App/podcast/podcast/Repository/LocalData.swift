@@ -23,4 +23,13 @@ class LocalData {
             userdefault.setValue(newValue, forKey: "token")
         }
     }
+    
+    var userId: String {
+        get {
+            return userdefault.string(forKey: "userId") ?? ""
+        }
+        set {
+            userdefault.setValue(newValue, forKey: "userId")
+        }
+    }
 }

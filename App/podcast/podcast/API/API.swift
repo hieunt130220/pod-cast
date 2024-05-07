@@ -18,6 +18,11 @@ enum APIRouter {
     case register(params: SignupRequest)
     case login(params: SigninRequest)
     case changePassword(params: ChangePasswordRequest)
+    case getMe
+    
+    case getPostCast(userId: String, page: Int, limit: Int)
+    case likePostCast(postId: String)
+    case unLikePostCast(postId: String)
 }
 
 extension APIRouter: TargetType {
@@ -42,14 +47,25 @@ extension APIRouter: TargetType {
             return "/auth/login"
         case .changePassword:
             return "/auth/change_password"
+        case .getMe:
+            return "/users/me"
+        case .getPostCast(let userId, page: _, limit: _):
+            return "/podcast/user/\(userId)"
+        case .likePostCast(postId: let postId):
+            return "/podcast/\(postId)/like"
+        case .unLikePostCast(postId: let postId):
+            return "/podcast/\(postId)/unlike"
         }
     }
     var method: Moya.Method {
         switch self {
         case .login,
                 .changePassword,
-                .register:
+                .register,
+                .likePostCast,
+                .unLikePostCast:
             return .post
+        default: return .get
         }
     }
     var parameters: [String: Any]? {
@@ -60,6 +76,14 @@ extension APIRouter: TargetType {
             return params.dictionary
         case .changePassword(let params):
             return params.dictionary
+        case .getMe:
+            return nil
+        case .getPostCast(userId: _, page: let page, limit: let limit):
+            return ["page": page, "perPage": limit]
+        case .likePostCast:
+            return nil
+        case .unLikePostCast:
+            return nil
         }
     }
 
@@ -74,6 +98,9 @@ extension APIRouter: TargetType {
         return nil
     }
     var parameterEncoding: Moya.ParameterEncoding {
+        if method == .get {
+            return URLEncoding.default
+        }
         return JSONEncoding.default
     }
 }
@@ -98,6 +125,7 @@ struct API {
         }) { result in
             switch result {
             case let .success(response):
+                print(response.request?.url)
                 let headerFields = response.response?.allHeaderFields
                 do {
                     let res = try response.filterSuccessfulStatusAndRedirectCodes()

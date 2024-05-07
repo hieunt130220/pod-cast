@@ -25,7 +25,7 @@ final class AppNavigator: AppNavigatorType {
     }
     
     func switchToMain() {
-        switchTo(viewController: UINavigationController(rootViewController: MainTabbarViewController()))
+        switchTo(viewController: MainTabBarViewController())
     }
     
     func switchToAuth() {
