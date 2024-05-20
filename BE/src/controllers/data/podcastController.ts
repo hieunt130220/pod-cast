@@ -202,57 +202,6 @@ const getDetailPodcast = asyncHandler(async (req: IUserReq, res: Response) => {
   }
 });
 
-const getRecommendPodcasts = asyncHandler(
-  async (req: Request, res: Response) => {
-    try {
-      const podcastData = await Podcast.aggregate([
-        {
-          $project: {
-            user: 1,
-            audio: 1,
-            uploadDate: 1,
-            background: 1,
-            caption: 1,
-            content: 1,
-            likes: { $size: "$likes" },
-            comments: 1,
-          },
-        },
-        { $sort: { likes: -1 } },
-        { $limit: 5 },
-        {
-          $lookup: {
-            from: "users",
-            localField: "user",
-            foreignField: "_id",
-            as: "user",
-          },
-        },
-        { $unwind: "$user" },
-        {
-          $project: {
-            "user.username": 1,
-            "user.avatar": 1,
-            audio: 1,
-            uploadDate: 1,
-            background: 1,
-            caption: 1,
-            content: 1,
-            likes: 1,
-            comments: 1,
-          },
-        },
-      ]);
-
-      res.status(200).json({
-        podcastData,
-      });
-    } catch (error) {
-      res.status(500).json(error);
-    }
-  }
-);
-
 const searchContentPodcast = asyncHandler(
   async (req: Request, res: Response) => {
     let searchKeyword = req.query.content;
@@ -269,7 +218,7 @@ const searchContentPodcast = asyncHandler(
       }
 
       const podcastData = await Podcast.find({
-        content: regex,
+        caption: regex,
       }).populate("user");
 
       if (!podcastData) {
@@ -475,7 +424,6 @@ export {
   getDetailPodcast,
   searchContentPodcast,
   deletePodcastById,
-  getRecommendPodcasts,
   likePost,
   unLikePost,
   commentPost,

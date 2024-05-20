@@ -4,7 +4,6 @@ import {
   getDetailPodcast,
   searchContentPodcast,
   deletePodcastById,
-  getRecommendPodcasts,
   likePost,
   unLikePost,
   commentPost,
@@ -45,8 +44,5 @@ router.route("/:id/comment")
 
 router.route("/search")
   .get(searchContentPodcast);
-
-router.route("/recommends")
-  .get(getRecommendPodcasts);
 
 module.exports = router;

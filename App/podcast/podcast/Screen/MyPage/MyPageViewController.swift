@@ -23,13 +23,19 @@ class MyPageViewController: UIViewController, Paginable {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        title = "My Page"
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(setting))
         refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
         tableView.refreshControl = refreshControl
-        tableView.registerNib(PostCastItemCell.self)
+        tableView.registerNib(PodCastItemCell.self)
         tableView.delegate = self
         tableView.dataSource = self
         tableView.backgroundColor = .systemGray6
         getUser()
+    }
+    
+    @objc private func setting() {
+        
     }
     
     @objc private func refresh() {
@@ -84,8 +90,8 @@ class MyPageViewController: UIViewController, Paginable {
 
 extension MyPageViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(PostCastItemCell.self, for: indexPath)
-        cell.postCast = myPostCasts[indexPath.row]
+        let cell = tableView.dequeueReusableCell(PodCastItemCell.self, for: indexPath)
+        cell.podCast = myPostCasts[indexPath.row]
         cell.delegate = self
         return cell
     }
@@ -113,9 +119,9 @@ extension MyPageViewController: UIScrollViewDelegate {
     }
 }
 
-extension MyPageViewController: PostCastItemCellDelegate {
-    func postCastItemCell(didTapLikeButtonInside cell: PostCastItemCell) {
-        guard let postCast = cell.postCast else { return }
+extension MyPageViewController: PodCastItemCellDelegate {
+    func podCastItemCell(didTapLikeButtonInside cell: PodCastItemCell) {
+        guard let postCast = cell.podCast else { return }
         if postCast.isLike {
             postCast.isLike = false
             postCast.likeCount -= 1
@@ -159,13 +165,15 @@ extension MyPageViewController: PostCastItemCellDelegate {
         }
     }
     
-    func postCastItemCell(didTapCommentButtonInside cell: PostCastItemCell) {
+    func podCastItemCell(didTapCommentButtonInside cell: PodCastItemCell) {
         
     }
     
-    func postCastItemCell(didTapPlayButtonInside cell: PostCastItemCell) {
-        
+    func podCastItemCell(didTapPlayButtonInside cell: PodCastItemCell) {
+        let vc = PodCastViewController()
+        vc.podCast = cell.podCast!
+        vc.modalPresentationStyle = .fullScreen
+        vc.hidesBottomBarWhenPushed = true
+        navigationController?.pushViewController(vc, animated: true)
     }
-    
-    
 }

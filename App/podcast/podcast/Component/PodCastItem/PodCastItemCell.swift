@@ -1,18 +1,18 @@
 //
-//  PostCastItemCell.swift
+//  PodCastItemCell.swift
 //  podcast
 //
 //  Created by Nguyen Trung Hieu on 7/5/24.
 //
 
 import UIKit
-protocol PostCastItemCellDelegate: AnyObject {
-    func postCastItemCell(didTapLikeButtonInside cell: PostCastItemCell)
-    func postCastItemCell(didTapCommentButtonInside cell: PostCastItemCell)
-    func postCastItemCell(didTapPlayButtonInside cell: PostCastItemCell)
+protocol PodCastItemCellDelegate: AnyObject {
+    func podCastItemCell(didTapLikeButtonInside cell: PodCastItemCell)
+    func podCastItemCell(didTapCommentButtonInside cell: PodCastItemCell)
+    func podCastItemCell(didTapPlayButtonInside cell: PodCastItemCell)
 }
 
-class PostCastItemCell: UITableViewCell {
+class PodCastItemCell: UITableViewCell {
 
     @IBOutlet weak var avatarImageView: UIImageView!
     @IBOutlet weak var userNameLbl: UILabel!
@@ -21,11 +21,11 @@ class PostCastItemCell: UITableViewCell {
     @IBOutlet weak var commentBtn: UIButton!
     @IBOutlet weak var postCastImgView: UIImageView!
     
-    weak var delegate: PostCastItemCellDelegate?
+    weak var delegate: PodCastItemCellDelegate?
     
-    var postCast: PostCast? {
+    var podCast: PostCast? {
         didSet {
-            guard let postCast = postCast else { return }
+            guard let postCast = podCast else { return }
             postCastImgView.kf.setImage(with: URL(string: postCast.background))
             avatarImageView.kf.setImage(with: URL(string: postCast.user.avatar))
             userNameLbl.text = postCast.user.username
@@ -49,12 +49,12 @@ class PostCastItemCell: UITableViewCell {
     }
     
     @IBAction func tapComment(_ sender: Any) {
-        delegate?.postCastItemCell(didTapCommentButtonInside: self)
+        delegate?.podCastItemCell(didTapCommentButtonInside: self)
     }
     @IBAction func tapLike(_ sender: Any) {
-        delegate?.postCastItemCell(didTapLikeButtonInside: self)
+        delegate?.podCastItemCell(didTapLikeButtonInside: self)
     }
     @IBAction func tapPlay(_ sender: Any) {
-        delegate?.postCastItemCell(didTapPlayButtonInside: self)
+        delegate?.podCastItemCell(didTapPlayButtonInside: self)
     }
 }

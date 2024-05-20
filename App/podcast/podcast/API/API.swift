@@ -20,6 +20,7 @@ enum APIRouter {
     case changePassword(params: ChangePasswordRequest)
     case getMe
     
+    case getPostCastFollow(page: Int, limit: Int)
     case getPostCast(userId: String, page: Int, limit: Int)
     case likePostCast(postId: String)
     case unLikePostCast(postId: String)
@@ -49,6 +50,9 @@ extension APIRouter: TargetType {
             return "/auth/change_password"
         case .getMe:
             return "/users/me"
+            
+        case .getPostCastFollow:
+            return "/podcast/new_feed"
         case .getPostCast(let userId, page: _, limit: _):
             return "/podcast/user/\(userId)"
         case .likePostCast(postId: let postId):
@@ -78,6 +82,8 @@ extension APIRouter: TargetType {
             return params.dictionary
         case .getMe:
             return nil
+        case .getPostCastFollow(let page, let limit):
+            return ["page": page, "perPage": limit]
         case .getPostCast(userId: _, page: let page, limit: let limit):
             return ["page": page, "perPage": limit]
         case .likePostCast:
@@ -125,7 +131,6 @@ struct API {
         }) { result in
             switch result {
             case let .success(response):
-                print(response.request?.url)
                 let headerFields = response.response?.allHeaderFields
                 do {
                     let res = try response.filterSuccessfulStatusAndRedirectCodes()

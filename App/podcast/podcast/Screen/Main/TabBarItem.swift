@@ -15,7 +15,7 @@ enum TabBarItem: Int, CaseIterable {
     var title: String {
         switch self {
         case .home:
-            return "Feed"
+            return "Home"
         case .search:
             return "Search"
         case .profile:
@@ -37,11 +37,11 @@ enum TabBarItem: Int, CaseIterable {
     var controller: UIViewController {
         switch self {
         case .home:
-            return UIViewController()
+            return UINavigationController(rootViewController: HomeViewController())
         case .search:
             return UIViewController()
         case .profile:
-            return MyPageViewController()
+            return UINavigationController(rootViewController: MyPageViewController())
         }
     }
 }

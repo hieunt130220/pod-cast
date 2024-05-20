@@ -47,7 +47,6 @@ class PodCastRepository {
         let _ = API.request(
             target: .likePostCast(postId: postId),
             success: { json, allHeaderFields in
-                print(json)
                 DispatchQueue.main.async {
                     completion?(json?["status_code"].intValue == StatusCode.success.rawValue)
                 }
@@ -71,6 +70,36 @@ class PodCastRepository {
             success: { json, allHeaderFields in
                 DispatchQueue.main.async {
                     completion?(json?["status_code"].intValue == StatusCode.success.rawValue)
+                }
+            },
+            error: { statusCode in
+                failure?(nil, statusCode)
+            },
+            failure: { error in
+                failure?((error as NSError), nil)
+            }
+        )
+    }
+    
+    func getPostCastFollowing(
+        page: Int,
+        per: Int,
+        completion: ((_ postCasts: [PostCast], _ hasNextPage: Bool) -> Void)? = { _, _ in },
+        failure: ((_ error: NSError?, _ statusCode: Int?) -> Void)? = { _, _ in }
+        ) {
+        let _ = API.request(
+            target: .getPostCastFollow(page: page, limit: per),
+            success: { json, allHeaderFields in
+                var hasNextPage = false
+                if let hasNext = json?["has_next"].boolValue {
+                    hasNextPage = hasNext
+                }
+                guard let postCast: [PostCast] = Mapper<PostCast>().mapArray(JSONObject: json?["data"].arrayObject) else {
+                    failure?(nil, nil)
+                    return
+                }
+                DispatchQueue.main.async {
+                    completion?(postCast, hasNextPage)
                 }
             },
             error: { statusCode in
