@@ -19,6 +19,9 @@ enum APIRouter {
     case login(params: SigninRequest)
     case changePassword(params: ChangePasswordRequest)
     case getMe
+    case getUser(uid: String)
+    case follow(uid: String)
+    case unFollow(uid: String)
     
     case newPodCast(caption: String, imgData: Data, audioData: Data)
     case getPodCastFollow(page: Int, limit: Int)
@@ -53,6 +56,12 @@ extension APIRouter: TargetType {
             return "/auth/change_password"
         case .getMe:
             return "/users/me"
+        case .getUser(let uid):
+            return "/users/\(uid)"
+        case .follow(let uid):
+            return "/users/\(uid)/follow"
+        case .unFollow(let uid):
+            return "/users/\(uid)/unFollow"
             
         case .newPodCast:
             return "/podcast"
@@ -78,7 +87,9 @@ extension APIRouter: TargetType {
                 .likePostCast,
                 .unLikePostCast,
                 .newPodCast,
-                .postComment:
+                .postComment,
+                .follow,
+                .unFollow:
             return .post
         default: return .get
         }
@@ -92,6 +103,12 @@ extension APIRouter: TargetType {
         case .changePassword(let params):
             return params.dictionary
         case .getMe:
+            return nil
+        case .getUser:
+            return nil
+        case .follow:
+            return nil
+        case .unFollow:
             return nil
         case .newPodCast:
             return nil

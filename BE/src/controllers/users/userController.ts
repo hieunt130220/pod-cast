@@ -16,7 +16,7 @@ const getMe = asyncHandler(async (req: IUserReq, res: Response) => {
   if (user) {
     res.json({
       data: {
-        id: user._id,
+        _id: user._id,
         username: user.username,
         email: user.email,
         avatar: user.avatar,
@@ -50,9 +50,6 @@ const updateProfile = asyncHandler(async (req: IUserReq, res: Response) => {
       res.json({
         username: updateUser.username,
         avatar: updateUser.avatar,
-        token: generateToken(updateUser._id),
-        role: updateUser.role,
-        roleId: updateUser.roleId,
         _id: updateUser._id,
       });
     }
@@ -96,22 +93,19 @@ const getOtherUserProfile = asyncHandler(async (req: IUserReq, res: Response) =>
 
     try {
       if (!userExits) {
-        // change following to true
         await Relationship.create({
           currentUser: currentId,
           user: otherUserId,
         });
-
-        // change follower to true
-
         await Relationship.create({
           currentUser: otherUserId,
           user: currentId,
         });
       }
-      const infoUser = await Relationship.findOne({ user: otherUserId })
+      const infoUser = await Relationship.findOne({
+         currentUser: currentId,
+        user: otherUserId, })
         .populate('user')
-        .select('user following followed_by -_id')
         .exec();
       res.json({
         data: {
@@ -186,6 +180,7 @@ const follow = asyncHandler(async (req: IUserReq, res: Response) => {
     );
 
     res.json({
+      status_code: 200,
       message: "Follow successfully!",
     });
   } catch (error) {
@@ -247,6 +242,7 @@ const unFollow = asyncHandler(async (req: IUserReq, res: Response) => {
     );
 
     res.json({
+      status_code: 200,
       message: "Unfollow successfully!",
     });
   } catch (error) {

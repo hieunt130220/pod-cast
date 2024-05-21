@@ -1,18 +1,26 @@
 //
-//  ProfileHeaderView.swift
+//  OtherUserHeaderView.swift
 //  podcast
 //
-//  Created by Nguyen Trung Hieu on 7/5/24.
+//  Created by Nguyen Trung Hieu on 21/5/24.
 //
 
 import UIKit
-import Kingfisher
-class ProfileHeaderView: UIView {
 
+protocol OtherUserHeaderViewDelegate: AnyObject {
+    func otherUserHeaderView(didTapFollowBtnInside view: OtherUserHeaderView)
+}
+
+class OtherUserHeaderView: UIView {
+
+    @IBOutlet weak var followBtn: FollowButton!
     @IBOutlet weak var avatarImageView: UIImageView!
     @IBOutlet weak var userNameLbl: UILabel!
     @IBOutlet weak var followersBtn: UIButton!
     @IBOutlet weak var followingBtn: UIButton!
+    
+    
+    weak var delegate: OtherUserHeaderViewDelegate?
     
     var user: User? {
         didSet {
@@ -21,7 +29,8 @@ class ProfileHeaderView: UIView {
             userNameLbl.text = user.username
             followersBtn.setAttributedTitle("\(user.followers) followers".styled(with: .font(.systemFont(ofSize: 15))), for: .normal)
             followingBtn.setAttributedTitle("\(user.followings) following".styled(with: .font(.systemFont(ofSize: 15))), for: .normal)
-            
+            followBtn.isFollow = user.isFollowing
+            print("hieunt == \(user.isFollowing)")
         }
     }
     
@@ -39,7 +48,11 @@ class ProfileHeaderView: UIView {
         fromNib()
     }
     
+    @IBAction func tapFollow(_ sender: Any) {
+        delegate?.otherUserHeaderView(didTapFollowBtnInside: self)
+    }
     @IBAction func tapFollowing(_ sender: Any) {
+        
     }
     
     @IBAction func tapFollower(_ sender: Any) {

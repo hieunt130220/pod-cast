@@ -24,14 +24,14 @@ class User: Mappable {
     }
     
     func mapping(map: ObjectMapper.Map) {
-        id <- map["id"]
+        id <- map["_id"]
         username <- map["username"]
         avatar <- map["avatar"]
         email <- map["email"]
         bio <- map["bio"]
         followers <- map["followers"]
         followings <- map["followings"]
-        isFollowing <- map["isFollowing"]
-        isFollowed <- map["followers"]
+        isFollowing <- map["is_following"]
+        isFollowed <- map["is_followed"]
     }
 }

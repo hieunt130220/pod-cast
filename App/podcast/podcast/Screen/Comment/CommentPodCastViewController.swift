@@ -144,14 +144,14 @@ extension CommentPodCastViewController: PodCastItemCellDelegate {
                 guard let `self` = self else { return }
                 if !success {
                     // rollback
-                    postCast.isLike = false
+                    postCast.isLike = true
                     postCast.likeCount += 1
                     self.tableView.reloadData()
                 }
             }, failure: { [weak self] _, _ in
                 guard let `self` = self else { return }
                 // rollback
-                postCast.isLike = false
+                postCast.isLike = true
                 postCast.likeCount += 1
                 self.tableView.reloadData()
             })

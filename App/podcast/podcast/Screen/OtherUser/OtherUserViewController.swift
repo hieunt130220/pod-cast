@@ -1,30 +1,28 @@
 //
-//  MyPageViewController.swift
+//  OtherUserViewController.swift
 //  podcast
 //
-//  Created by Nguyen Trung Hieu on 7/5/24.
+//  Created by Nguyen Trung Hieu on 21/5/24.
 //
 
 import UIKit
 
-class MyPageViewController: UIViewController, Paginable {
-
+class OtherUserViewController: UIViewController, Paginable {
+    
     @IBOutlet weak var tableView: UITableView!
     private lazy var refreshControl = UIRefreshControl()
     
-    private var myPodCasts: [PodCast] = []
-    private var user: User? {
+    private var podCasts: [PodCast] = []
+    var user: User? {
         didSet {
             guard let user = user else { return }
-            LocalData.shared.userId = user.id
-            reload()
+            title = user.username
+            fetch()
         }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "My Page"
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "gear"), style: .done, target: self, action: #selector(setting))
         refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
         tableView.refreshControl = refreshControl
         tableView.registerNib(PodCastItemCell.self)
@@ -34,16 +32,12 @@ class MyPageViewController: UIViewController, Paginable {
         getUser()
     }
     
-    @objc private func setting() {
-        
-    }
-    
     @objc private func refresh() {
-        getUser()
+        reload()
     }
     
     private func getUser() {
-        AppRepository.user.getMe { user in
+        AppRepository.user.getOtherUser(uid: user!.id) { user in
             self.user = user
             self.tableView.reloadData()
         } failure: { error, statusCode in
@@ -69,9 +63,9 @@ class MyPageViewController: UIViewController, Paginable {
             guard let `self` = self else { return }
             if isFirstPage {
                 self.refreshControl.endRefreshing()
-                self.myPodCasts = []
+                self.podCasts = []
             }
-            self.myPodCasts.append(contentsOf: postCasts)
+            self.podCasts.append(contentsOf: postCasts)
             let offset = self.tableView.contentOffset
             self.tableView.reloadData()
             self.tableView.setContentOffset(offset, animated: false)
@@ -86,33 +80,35 @@ class MyPageViewController: UIViewController, Paginable {
         AppRepository.podCast.getPodCast(by: user!.id, page: page, per: per, completion: completionClosure, failure: failureClosure)
     }
     func updateDataSource(_ items: Element) {}
+    
 }
 
-extension MyPageViewController: UITableViewDataSource {
+extension OtherUserViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(PodCastItemCell.self, for: indexPath)
-        cell.podCast = myPodCasts[indexPath.row]
+        cell.podCast = podCasts[indexPath.row]
         cell.delegate = self
         return cell
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return myPodCasts.count
+        return podCasts.count
     }
 }
 
-extension MyPageViewController: UITableViewDelegate {
+extension OtherUserViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let vc = PodCastViewController()
-        vc.podCast = myPodCasts[indexPath.row]
+        vc.podCast = podCasts[indexPath.row]
         vc.modalPresentationStyle = .fullScreen
         vc.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(vc, animated: true)
     }
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let view = ProfileHeaderView()
+        let view = OtherUserHeaderView()
         view.backgroundColor = .white
         view.user = self.user
+        view.delegate = self
         return view
     }
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -120,13 +116,13 @@ extension MyPageViewController: UITableViewDelegate {
     }
 }
 
-extension MyPageViewController: UIScrollViewDelegate {
+extension OtherUserViewController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         paginate(scrollView)
     }
 }
 
-extension MyPageViewController: PodCastItemCellDelegate {
+extension OtherUserViewController: PodCastItemCellDelegate {
     func podCastItemCell(didTapLikeButtonInside cell: PodCastItemCell) {
         guard let postCast = cell.podCast else { return }
         if postCast.isLike {
@@ -177,5 +173,52 @@ extension MyPageViewController: PodCastItemCellDelegate {
         vc.hidesBottomBarWhenPushed = true
         vc.podCast = cell.podCast
         navigationController?.pushViewController(vc, animated: true)
+    }
+}
+
+extension OtherUserViewController: OtherUserHeaderViewDelegate {
+    func otherUserHeaderView(didTapFollowBtnInside view: OtherUserHeaderView) {
+        guard let user = user else { return }
+        if user.isFollowing {
+            user.isFollowing = false
+            user.followers -= 1
+            tableView.reloadData()
+            AppRepository.user.unFollow(uid: user.id,
+                                         completion: { [weak self] success in
+                guard let `self` = self else { return }
+                if !success {
+                    // rollback
+                    user.isFollowing = true
+                    user.followers += 1
+                    self.tableView.reloadData()
+                }
+            }, failure: { [weak self] _, _ in
+                guard let `self` = self else { return }
+                // rollback
+                user.isFollowing = true
+                user.followers += 1
+                self.tableView.reloadData()
+            })
+        } else {
+            user.isFollowing = true
+            user.followers += 1
+            tableView.reloadData()
+            AppRepository.user.follow(uid: user.id,
+                                         completion: { [weak self] success in
+                guard let `self` = self else { return }
+                if !success {
+                    // rollback
+                    user.isFollowing = false
+                    user.followers -= 1
+                    self.tableView.reloadData()
+                }
+            }, failure: { [weak self] _, _ in
+                guard let `self` = self else { return }
+                // rollback
+                user.isFollowing = false
+                user.followers -= 1
+                self.tableView.reloadData()
+            })
+        }
     }
 }

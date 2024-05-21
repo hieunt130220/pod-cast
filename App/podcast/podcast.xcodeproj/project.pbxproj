@@ -45,6 +45,11 @@
 		EAEA5B972BEA8F990006CC37 /* PodCastItemCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = EAEA5B952BEA8F990006CC37 /* PodCastItemCell.xib */; };
 		EAEA5B992BEA8FE40006CC37 /* PodCast.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAEA5B982BEA8FE40006CC37 /* PodCast.swift */; };
 		EAEA5B9C2BEA96480006CC37 /* Paginable.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAEA5B9B2BEA96480006CC37 /* Paginable.swift */; };
+		EAEA5BA32BFCF50F0006CC37 /* OtherUserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAEA5BA12BFCF50F0006CC37 /* OtherUserViewController.swift */; };
+		EAEA5BA42BFCF50F0006CC37 /* OtherUserViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = EAEA5BA22BFCF50F0006CC37 /* OtherUserViewController.xib */; };
+		EAEA5BAB2BFCF61F0006CC37 /* OtherUserHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAEA5BAA2BFCF61F0006CC37 /* OtherUserHeaderView.swift */; };
+		EAEA5BAD2BFCF6250006CC37 /* OtherUserHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = EAEA5BAC2BFCF6250006CC37 /* OtherUserHeaderView.xib */; };
+		EAEA5BAF2BFCF6F20006CC37 /* FollowButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAEA5BAE2BFCF6F20006CC37 /* FollowButton.swift */; };
 		EAEB1AE82BCD2A9B00FE5298 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAEB1AE72BCD2A9B00FE5298 /* AppDelegate.swift */; };
 		EAEB1AEA2BCD2A9B00FE5298 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAEB1AE92BCD2A9B00FE5298 /* SceneDelegate.swift */; };
 		EAEB1AEC2BCD2A9B00FE5298 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAEB1AEB2BCD2A9B00FE5298 /* ViewController.swift */; };
@@ -102,6 +107,11 @@
 		EAEA5B952BEA8F990006CC37 /* PodCastItemCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PodCastItemCell.xib; sourceTree = "<group>"; };
 		EAEA5B982BEA8FE40006CC37 /* PodCast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodCast.swift; sourceTree = "<group>"; };
 		EAEA5B9B2BEA96480006CC37 /* Paginable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Paginable.swift; sourceTree = "<group>"; };
+		EAEA5BA12BFCF50F0006CC37 /* OtherUserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherUserViewController.swift; sourceTree = "<group>"; };
+		EAEA5BA22BFCF50F0006CC37 /* OtherUserViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OtherUserViewController.xib; sourceTree = "<group>"; };
+		EAEA5BAA2BFCF61F0006CC37 /* OtherUserHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherUserHeaderView.swift; sourceTree = "<group>"; };
+		EAEA5BAC2BFCF6250006CC37 /* OtherUserHeaderView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OtherUserHeaderView.xib; sourceTree = "<group>"; };
+		EAEA5BAE2BFCF6F20006CC37 /* FollowButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowButton.swift; sourceTree = "<group>"; };
 		EAEB1AE42BCD2A9B00FE5298 /* podcast.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = podcast.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EAEB1AE72BCD2A9B00FE5298 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		EAEB1AE92BCD2A9B00FE5298 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -242,6 +252,7 @@
 		EAEA5B8D2BEA8C270006CC37 /* Component */ = {
 			isa = PBXGroup;
 			children = (
+				EAEA5BA52BFCF5C30006CC37 /* OtherUserHeaderView */,
 				EABC1AB52BFC5F8B003AC63D /* CommentItem */,
 				EAEA5B9A2BEA963C0006CC37 /* Paginable */,
 				EAEA5B932BEA8F720006CC37 /* PodCastItem */,
@@ -274,6 +285,25 @@
 				EAEA5B9B2BEA96480006CC37 /* Paginable.swift */,
 			);
 			path = Paginable;
+			sourceTree = "<group>";
+		};
+		EAEA5BA02BFCF4F90006CC37 /* OtherUser */ = {
+			isa = PBXGroup;
+			children = (
+				EAEA5BA12BFCF50F0006CC37 /* OtherUserViewController.swift */,
+				EAEA5BA22BFCF50F0006CC37 /* OtherUserViewController.xib */,
+			);
+			path = OtherUser;
+			sourceTree = "<group>";
+		};
+		EAEA5BA52BFCF5C30006CC37 /* OtherUserHeaderView */ = {
+			isa = PBXGroup;
+			children = (
+				EAEA5BAA2BFCF61F0006CC37 /* OtherUserHeaderView.swift */,
+				EAEA5BAC2BFCF6250006CC37 /* OtherUserHeaderView.xib */,
+				EAEA5BAE2BFCF6F20006CC37 /* FollowButton.swift */,
+			);
+			path = OtherUserHeaderView;
 			sourceTree = "<group>";
 		};
 		EAEB1ADB2BCD2A9B00FE5298 = {
@@ -325,6 +355,7 @@
 		EAEB1B002BCD30DE00FE5298 /* Screen */ = {
 			isa = PBXGroup;
 			children = (
+				EAEA5BA02BFCF4F90006CC37 /* OtherUser */,
 				EACCDA8F2BFC423A00B433EC /* Comment */,
 				EACCDA8A2BFC32C200B433EC /* NewPodCast */,
 				EACCDA7B2BFAE21900B433EC /* PodCast */,
@@ -459,6 +490,8 @@
 				EACCDA7F2BFAE34B00B433EC /* PodCastViewController.xib in Resources */,
 				EACCDA932BFC424F00B433EC /* CommentPodCastViewController.xib in Resources */,
 				EABC1AB92BFC5FA3003AC63D /* CommentItemCell.xib in Resources */,
+				EAEA5BAD2BFCF6250006CC37 /* OtherUserHeaderView.xib in Resources */,
+				EAEA5BA42BFCF50F0006CC37 /* OtherUserViewController.xib in Resources */,
 				EAEA5B832BEA8A4D0006CC37 /* SearchViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -528,6 +561,7 @@
 				EAEA5B7C2BEA8A2B0006CC37 /* HomeViewController.swift in Sources */,
 				EAEB1B0F2BCE0ED200FE5298 /* Codable+ext.swift in Sources */,
 				EACCDA7E2BFAE34B00B433EC /* PodCastViewController.swift in Sources */,
+				EAEA5BA32BFCF50F0006CC37 /* OtherUserViewController.swift in Sources */,
 				EAEB1AFE2BCD2B8000FE5298 /* API.swift in Sources */,
 				EAEA5B962BEA8F990006CC37 /* PodCastItemCell.swift in Sources */,
 				EAEB1B052BCD319100FE5298 /* AuthRepository.swift in Sources */,
@@ -541,11 +575,13 @@
 				EA2CC57E2BE39D1D00B8CEA6 /* MainTabBarViewController.swift in Sources */,
 				EA2CC5702BE38D0300B8CEA6 /* AppNavigator.swift in Sources */,
 				EA2CC5832BE3A04800B8CEA6 /* SignUpViewController.swift in Sources */,
+				EAEA5BAB2BFCF61F0006CC37 /* OtherUserHeaderView.swift in Sources */,
 				EAEB1B112BCE121B00FE5298 /* User.swift in Sources */,
 				EAEA5B902BEA8C500006CC37 /* ProfileHeaderView.swift in Sources */,
 				EAEB1B152BCE688100FE5298 /* LocalData.swift in Sources */,
 				EA2CC5762BE3969900B8CEA6 /* String+ext.swift in Sources */,
 				EAEB1B092BCD31A800FE5298 /* PodCastRepository.swift in Sources */,
+				EAEA5BAF2BFCF6F20006CC37 /* FollowButton.swift in Sources */,
 				EAEA5B992BEA8FE40006CC37 /* PodCast.swift in Sources */,
 				EA2CC57A2BE39AD700B8CEA6 /* Constants.swift in Sources */,
 				EABC1ABB2BFC7734003AC63D /* Date+ext.swift in Sources */,
