@@ -20,10 +20,13 @@ enum APIRouter {
     case changePassword(params: ChangePasswordRequest)
     case getMe
     
-    case getPostCastFollow(page: Int, limit: Int)
-    case getPostCast(userId: String, page: Int, limit: Int)
+    case newPodCast(caption: String, imgData: Data, audioData: Data)
+    case getPodCastFollow(page: Int, limit: Int)
+    case getPodCast(userId: String, page: Int, limit: Int)
     case likePostCast(postId: String)
     case unLikePostCast(postId: String)
+    case getComment(postId: String, page: Int, limit: Int)
+    case postComment(postId: String, comment: String)
 }
 
 extension APIRouter: TargetType {
@@ -51,14 +54,20 @@ extension APIRouter: TargetType {
         case .getMe:
             return "/users/me"
             
-        case .getPostCastFollow:
+        case .newPodCast:
+            return "/podcast"
+        case .getPodCastFollow:
             return "/podcast/new_feed"
-        case .getPostCast(let userId, page: _, limit: _):
+        case .getPodCast(let userId, page: _, limit: _):
             return "/podcast/user/\(userId)"
         case .likePostCast(postId: let postId):
             return "/podcast/\(postId)/like"
         case .unLikePostCast(postId: let postId):
             return "/podcast/\(postId)/unlike"
+        case .getComment(let postId, page: _, limit: _):
+            return "/podcast/\(postId)/comment"
+        case .postComment(let postId, comment: _):
+            return "/podcast/\(postId)/comment"
         }
     }
     var method: Moya.Method {
@@ -67,7 +76,9 @@ extension APIRouter: TargetType {
                 .changePassword,
                 .register,
                 .likePostCast,
-                .unLikePostCast:
+                .unLikePostCast,
+                .newPodCast,
+                .postComment:
             return .post
         default: return .get
         }
@@ -82,26 +93,44 @@ extension APIRouter: TargetType {
             return params.dictionary
         case .getMe:
             return nil
-        case .getPostCastFollow(let page, let limit):
+        case .newPodCast:
+            return nil
+        case .getPodCastFollow(let page, let limit):
             return ["page": page, "perPage": limit]
-        case .getPostCast(userId: _, page: let page, limit: let limit):
+        case .getPodCast(userId: _, page: let page, limit: let limit):
             return ["page": page, "perPage": limit]
         case .likePostCast:
             return nil
         case .unLikePostCast:
             return nil
+        case .getComment(postId: _, let page, let limit):
+            return ["page": page, "perPage": limit]
+        case .postComment(postId: _, let comment):
+            return ["comment": comment]
         }
     }
 
     var task: Moya.Task {
         if let parameters = self.parameters {
             return .requestParameters(parameters: parameters, encoding: self.parameterEncoding)
+        } else if let multipartBody = multipartBody {
+            return .uploadMultipart(multipartBody)
         } else {
             return .requestPlain
         }
     }
     var multipartBody: [Moya.MultipartFormData]? {
-        return nil
+        switch self {
+        case .newPodCast(let caption, let imgData, let audioData):
+            var data: [Moya.MultipartFormData] = []
+            data.append(Moya.MultipartFormData(provider: .data(imgData), name: "background", fileName: "upload.jpeg", mimeType: "image/jpeg"))
+            data.append(Moya.MultipartFormData(provider: .data(audioData), name: "file", fileName: "audio.mp3", mimeType: "audio/mp3"))
+            let captionData = String(caption).data(using: String.Encoding.utf8) ?? Data()
+            data.append(MultipartFormData(provider: .data(captionData), name: "caption"))
+            return data
+        default:
+            return nil
+        }
     }
     var parameterEncoding: Moya.ParameterEncoding {
         if method == .get {

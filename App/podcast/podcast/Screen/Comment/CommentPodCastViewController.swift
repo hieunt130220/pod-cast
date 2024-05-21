@@ -1,59 +1,66 @@
 //
-//  MyPageViewController.swift
+//  CommentPodCastViewController.swift
 //  podcast
 //
-//  Created by Nguyen Trung Hieu on 7/5/24.
+//  Created by HieuNT on 21/05/2024.
 //
 
 import UIKit
 
-class MyPageViewController: UIViewController, Paginable {
+class CommentPodCastViewController: UIViewController, Paginable {
 
+    @IBOutlet weak var bottomContainerViewConstraint: NSLayoutConstraint!
+    @IBOutlet weak var containerView: UIView!
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var postCommentBtn: UIButton!
+    @IBOutlet weak var commentTf: UITextField!
+    
     private lazy var refreshControl = UIRefreshControl()
     
-    private var myPodCasts: [PodCast] = []
-    private var user: User? {
-        didSet {
-            guard let user = user else { return }
-            LocalData.shared.userId = user.id
-            fetch()
-        }
-    }
+    private var comments: [Comment] = []
+    var podCast: PodCast?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "My Page"
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "gear"), style: .done, target: self, action: #selector(setting))
+        
+        title = "Comment"
         refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
         tableView.refreshControl = refreshControl
         tableView.registerNib(PodCastItemCell.self)
+        tableView.registerNib(CommentItemCell.self)
         tableView.delegate = self
         tableView.dataSource = self
         tableView.backgroundColor = .systemGray6
-        getUser()
+        tableView.contentInset = UIEdgeInsets(top: 16, left: 0, bottom: 0, right: 0)
+        commentTf.delegate = self
+        
+        fetch()
     }
     
-    @objc private func setting() {
-        
+    @IBAction func postComment(_ sender: Any) {
+        guard let comment = commentTf.text, !comment.isEmpty else { return }
+        view.activityIndicatorView.startAnimating()
+        AppRepository.podCast
+            .postComment(postId: podCast!.id, comment: comment, completion: {[weak self] comment in
+                self?.view.activityIndicatorView.stopAnimating()
+                self?.commentTf.text = ""
+                self?.comments.insert(comment, at: 0)
+                self?.tableView.reloadData()
+            }, failure: {[weak self] error,statusCode in
+                if statusCode == StatusCode.notFound.rawValue {
+                    self?.showMessage("Pod cast has beed delete")
+                }
+                self?.view.activityIndicatorView.stopAnimating()
+            })
     }
     
     @objc private func refresh() {
         reload()
     }
-    
-    private func getUser() {
-        AppRepository.user.getMe { user in
-            self.user = user
-            self.tableView.reloadData()
-        } failure: { error, statusCode in
-            
-        }
-    }
-    
+
     // MARK: Paginable
     
-    typealias Element = [PodCast]
+    typealias Element = [Comment]
     var page: Int = 1
     var per: Int = 10
     var isFetchingItems: Bool = false
@@ -65,68 +72,67 @@ class MyPageViewController: UIViewController, Paginable {
         isFetchingItems = true
         
         // define closures in advance
-        let completionClosure: (_ postCasts: [PodCast], _ hasNextPage: Bool) -> Void = { [weak self] (postCasts, hasNextPage) in
+        let completionClosure: (_ comments: [Comment], _ hasNextPage: Bool) -> Void = { [weak self] (comments, hasNextPage) in
             guard let `self` = self else { return }
             if isFirstPage {
                 self.refreshControl.endRefreshing()
-                self.myPodCasts = []
+                self.comments = []
             }
-            self.myPodCasts.append(contentsOf: postCasts)
+            self.comments.append(contentsOf: comments)
             let offset = self.tableView.contentOffset
             self.tableView.reloadData()
             self.tableView.setContentOffset(offset, animated: false)
             self.isFetchingItems = false
-            completion(postCasts, hasNextPage)
+            completion(comments, hasNextPage)
             self.hasNextPage = false
         }
         let failureClosure: (_ error: NSError?, _ statusCode: Int?) -> Void = { (error, statusCode) in
             self.refreshControl.endRefreshing()
             print("Error error= \(String(describing: error)), StatusCode= \(String(describing: statusCode))")
         }
-        AppRepository.podCast.getPodCast(by: user!.id, page: page, per: per, completion: completionClosure, failure: failureClosure)
+        AppRepository.podCast.getComments(postId: podCast!.id, page: page, per: per, completion: completionClosure, failure: failureClosure)
     }
     func updateDataSource(_ items: Element) {}
 }
 
-extension MyPageViewController: UITableViewDataSource {
+extension CommentPodCastViewController: UITableViewDataSource {
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(PodCastItemCell.self, for: indexPath)
-        cell.podCast = myPodCasts[indexPath.row]
-        cell.delegate = self
+        if indexPath.section == 0 {
+            let cell = tableView.dequeueReusableCell(PodCastItemCell.self, for: indexPath)
+            cell.commentBtn.isHidden = true
+            cell.podCast = podCast
+            cell.delegate = self
+            return cell
+        }
+        let cell = tableView.dequeueReusableCell(CommentItemCell.self, for: indexPath)
+        cell.comment = comments[indexPath.row]
         return cell
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return myPodCasts.count
+        if section == 0 {
+            return 1
+        }
+        return comments.count
+    }
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 2
     }
 }
 
-extension MyPageViewController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let vc = PodCastViewController()
-        vc.podCast = myPodCasts[indexPath.row]
-        vc.modalPresentationStyle = .fullScreen
-        vc.hidesBottomBarWhenPushed = true
-        navigationController?.pushViewController(vc, animated: true)
-    }
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let view = ProfileHeaderView()
-        view.backgroundColor = .white
-        view.user = self.user
-        return view
-    }
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return UITableView.automaticDimension
-    }
+extension CommentPodCastViewController: UITableViewDelegate {
+   
 }
 
-extension MyPageViewController: UIScrollViewDelegate {
+extension CommentPodCastViewController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         paginate(scrollView)
     }
 }
 
-extension MyPageViewController: PodCastItemCellDelegate {
+extension CommentPodCastViewController: PodCastItemCellDelegate {
     func podCastItemCell(didTapLikeButtonInside cell: PodCastItemCell) {
         guard let postCast = cell.podCast else { return }
         if postCast.isLike {
@@ -173,9 +179,10 @@ extension MyPageViewController: PodCastItemCellDelegate {
     }
     
     func podCastItemCell(didTapCommentButtonInside cell: PodCastItemCell) {
-        let vc = CommentPodCastViewController()
-        vc.hidesBottomBarWhenPushed = true
-        vc.podCast = cell.podCast
-        navigationController?.pushViewController(vc, animated: true)
+        
     }
+}
+
+extension CommentPodCastViewController: UITextFieldDelegate {
+    
 }

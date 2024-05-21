@@ -23,7 +23,7 @@ class PodCastViewController: UIViewController {
     @IBOutlet weak var startTimeLbl: UILabel!
     @IBOutlet weak var thumbnailImage: UIImageView!
     
-    var podCast: PostCast!
+    var podCast: PodCast!
     
     private let player: AVPlayer = {
         let avPlayer = AVPlayer()

@@ -7,7 +7,7 @@
 
 import Foundation
 import ObjectMapper
-class PostCast: Mappable {
+class PodCast: Mappable {
     
     var id: String = ""
     var user: User = User()

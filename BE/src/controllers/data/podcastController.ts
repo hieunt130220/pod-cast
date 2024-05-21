@@ -103,6 +103,7 @@ const getAllPodcastByUserId = asyncHandler(async (req: IUserReq, res: Response) 
     const page: number = Number(req.query.page) || 1
     const query = { user: req.params.id }
     const podcasts = await Podcast.find(query)
+      .sort({uploadDate:-1}) 
       .populate("user", 'username avatar')
       .select('audio caption background likes comments uploadDate')
       .skip((limit * page) - limit)
@@ -164,7 +165,7 @@ const getPodcastFollowingUser = asyncHandler(async (req: IUserReq, res: Response
       }
     })
 
-    listData = [].concat(...(await Promise.all(data)))
+    listData = [].concat(...(await Promise.all(data))).sort((a: any, b: any) => b.uploadDate - a.uploadDate);
     res.status(200).json({
       data: listData.slice(limit * (page - 1), limit * page),
       has_next_page: listData.length > limit * page
@@ -372,7 +373,6 @@ const unLikePost = asyncHandler(async (req: IUserReq, res: Response) => {
 
 const commentPost = asyncHandler(async (req: IUserReq, res: Response) => {
   const now = new Date();
-  const uploadDate = now.toISOString();
   const podcast = await Podcast.findById(req.params.id);
   try {
     if (!podcast) {
@@ -380,14 +380,18 @@ const commentPost = asyncHandler(async (req: IUserReq, res: Response) => {
     }
 
     const comment = {
-      user: req.user.id,
+      user: {
+        _id: req.user.id,
+        avatar: req.user.avatar,
+        username: req.user.username
+      },
       text: req.body.comment,
       date: new Date(),
     };
 
     podcast.comments.push(comment);
     await podcast.save();
-
+    
     res.status(200).json({
       data: comment,
     });
@@ -405,7 +409,7 @@ const getCommentPost = asyncHandler(async (req: Request, res: Response) => {
       {
         comments: 1,
       }
-    ).populate("comments.user", "username avatar");
+    ).sort({date:-1}).populate("comments.user", "username avatar");
 
     res.status(200).json({
       data: podcast.comments,

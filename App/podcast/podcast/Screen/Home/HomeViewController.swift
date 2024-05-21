@@ -13,7 +13,7 @@ class HomeViewController: UIViewController, Paginable {
     
     private lazy var refreshControl = UIRefreshControl()
     
-    private var podCasts: [PostCast] = []
+    private var podCasts: [PodCast] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,7 +31,9 @@ class HomeViewController: UIViewController, Paginable {
     }
     
     @objc private func createPodCast() {
-        
+        let vc = NewPodCastViewController()
+        vc.hidesBottomBarWhenPushed = true
+        navigationController?.pushViewController(vc, animated: true)
     }
 
     @objc private func refresh() {
@@ -40,7 +42,7 @@ class HomeViewController: UIViewController, Paginable {
 
     // MARK: Paginable
     
-    typealias Element = [PostCast]
+    typealias Element = [PodCast]
     var page: Int = 1
     var per: Int = 10
     var isFetchingItems: Bool = false
@@ -52,7 +54,7 @@ class HomeViewController: UIViewController, Paginable {
         isFetchingItems = true
         
         // define closures in advance
-        let completionClosure: (_ postCasts: [PostCast], _ hasNextPage: Bool) -> Void = { [weak self] (postCasts, hasNextPage) in
+        let completionClosure: (_ postCasts: [PodCast], _ hasNextPage: Bool) -> Void = { [weak self] (postCasts, hasNextPage) in
             guard let `self` = self else { return }
             if isFirstPage {
                 self.refreshControl.endRefreshing()
@@ -70,12 +72,20 @@ class HomeViewController: UIViewController, Paginable {
             self.refreshControl.endRefreshing()
             print("Error error= \(String(describing: error)), StatusCode= \(String(describing: statusCode))")
         }
-        AppRepository.podCast.getPostCastFollowing(page: page, per: per, completion: completionClosure, failure: failureClosure)
+        AppRepository.podCast.getPodCastFollowing(page: page, per: per, completion: completionClosure, failure: failureClosure)
     }
     func updateDataSource(_ items: Element) {}
 }
 
 extension HomeViewController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let vc = PodCastViewController()
+        vc.podCast = podCasts[indexPath.row]
+        vc.modalPresentationStyle = .fullScreen
+        vc.hidesBottomBarWhenPushed = true
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(PodCastItemCell.self, for: indexPath)
         cell.podCast = podCasts[indexPath.row]
@@ -145,14 +155,9 @@ extension HomeViewController: PodCastItemCellDelegate {
     }
     
     func podCastItemCell(didTapCommentButtonInside cell: PodCastItemCell) {
-        
-    }
-    
-    func podCastItemCell(didTapPlayButtonInside cell: PodCastItemCell) {
-        let vc = PodCastViewController()
-        vc.podCast = cell.podCast!
-        vc.modalPresentationStyle = .fullScreen
+        let vc = CommentPodCastViewController()
         vc.hidesBottomBarWhenPushed = true
+        vc.podCast = cell.podCast
         navigationController?.pushViewController(vc, animated: true)
     }
 }

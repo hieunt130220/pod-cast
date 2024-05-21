@@ -9,7 +9,6 @@ import UIKit
 protocol PodCastItemCellDelegate: AnyObject {
     func podCastItemCell(didTapLikeButtonInside cell: PodCastItemCell)
     func podCastItemCell(didTapCommentButtonInside cell: PodCastItemCell)
-    func podCastItemCell(didTapPlayButtonInside cell: PodCastItemCell)
 }
 
 class PodCastItemCell: UITableViewCell {
@@ -23,7 +22,7 @@ class PodCastItemCell: UITableViewCell {
     
     weak var delegate: PodCastItemCellDelegate?
     
-    var podCast: PostCast? {
+    var podCast: PodCast? {
         didSet {
             guard let postCast = podCast else { return }
             postCastImgView.kf.setImage(with: URL(string: postCast.background))
@@ -53,8 +52,5 @@ class PodCastItemCell: UITableViewCell {
     }
     @IBAction func tapLike(_ sender: Any) {
         delegate?.podCastItemCell(didTapLikeButtonInside: self)
-    }
-    @IBAction func tapPlay(_ sender: Any) {
-        delegate?.podCastItemCell(didTapPlayButtonInside: self)
     }
 }
