@@ -48,9 +48,14 @@ const updateProfile = asyncHandler(async (req: IUserReq, res: Response) => {
       const updateUser = await user.save();
 
       res.json({
-        username: updateUser.username,
-        avatar: updateUser.avatar,
-        _id: updateUser._id,
+       data: {
+        _id: user._id,
+        username: user.username,
+        email: user.email,
+        avatar: user.avatar,
+        followers: user.followers.length,
+        followings: user.following.length,
+       }
       });
     }
   } catch (error) {

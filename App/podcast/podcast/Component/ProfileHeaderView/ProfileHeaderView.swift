@@ -7,12 +7,22 @@
 
 import UIKit
 import Kingfisher
+
+protocol ProfileHeaderViewDelegate: AnyObject {
+    func profileHeaderView(didTapChangeAvatarInside view: ProfileHeaderView)
+    func profileHeaderView(didTapEditNameInside view: ProfileHeaderView)
+}
+
 class ProfileHeaderView: UIView {
 
+    @IBOutlet weak var editName: UIButton!
+    @IBOutlet weak var changeAvatar: UIButton!
     @IBOutlet weak var avatarImageView: UIImageView!
     @IBOutlet weak var userNameLbl: UILabel!
     @IBOutlet weak var followersBtn: UIButton!
     @IBOutlet weak var followingBtn: UIButton!
+    
+    weak var delegate: ProfileHeaderViewDelegate?
     
     var user: User? {
         didSet {
@@ -39,6 +49,12 @@ class ProfileHeaderView: UIView {
         fromNib()
     }
     
+    @IBAction func tapEditName(_ sender: Any) {
+        delegate?.profileHeaderView(didTapEditNameInside: self)
+    }
+    @IBAction func tapChangeAvatar(_ sender: Any) {
+        delegate?.profileHeaderView(didTapChangeAvatarInside: self)
+    }
     @IBAction func tapFollowing(_ sender: Any) {
     }
     

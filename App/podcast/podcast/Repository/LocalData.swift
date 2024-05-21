@@ -33,3 +33,10 @@ class LocalData {
         }
     }
 }
+
+extension LocalData {
+    func withdrawn() {
+        token = ""
+        userId = ""
+    }
+}

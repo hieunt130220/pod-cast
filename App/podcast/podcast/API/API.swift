@@ -18,6 +18,7 @@ enum APIRouter {
     case register(params: SignupRequest)
     case login(params: SigninRequest)
     case changePassword(params: ChangePasswordRequest)
+    case updateProfile(avatar: Data?, userName: String?)
     case getMe
     case getUser(uid: String)
     case follow(uid: String)
@@ -58,6 +59,8 @@ extension APIRouter: TargetType {
             return "/auth/change_password"
         case .getMe:
             return "/users/me"
+        case .updateProfile:
+            return "/users/me"
         case .getUser(let uid):
             return "/users/\(uid)"
         case .follow(let uid):
@@ -83,6 +86,7 @@ extension APIRouter: TargetType {
             return "/podcast/\(postId)/comment"
         case .searchPodCast:
             return "/podcast/search"
+       
         }
     }
     var method: Moya.Method {
@@ -97,6 +101,8 @@ extension APIRouter: TargetType {
                 .follow,
                 .unFollow:
             return .post
+        case .updateProfile:
+            return .put
         default: return .get
         }
     }
@@ -108,32 +114,20 @@ extension APIRouter: TargetType {
             return params.dictionary
         case .changePassword(let params):
             return params.dictionary
-        case .getMe:
-            return nil
-        case .getUser:
-            return nil
-        case .follow:
-            return nil
-        case .unFollow:
-            return nil
         case .searchUser(let text):
             return ["username": text]
-        case .newPodCast:
-            return nil
         case .getPodCastFollow(let page, let limit):
             return ["page": page, "perPage": limit]
         case .getPodCast(userId: _, page: let page, limit: let limit):
             return ["page": page, "perPage": limit]
-        case .likePostCast:
-            return nil
-        case .unLikePostCast:
-            return nil
         case .getComment(postId: _, let page, let limit):
             return ["page": page, "perPage": limit]
         case .postComment(postId: _, let comment):
             return ["comment": comment]
         case .searchPodCast(let text):
             return ["caption": text]
+        default:
+            return nil
         }
     }
 
@@ -154,6 +148,15 @@ extension APIRouter: TargetType {
             data.append(Moya.MultipartFormData(provider: .data(audioData), name: "file", fileName: "audio.mp3", mimeType: "audio/mp3"))
             let captionData = String(caption).data(using: String.Encoding.utf8) ?? Data()
             data.append(MultipartFormData(provider: .data(captionData), name: "caption"))
+            return data
+        case .updateProfile(let avatar, let userName):
+            var data: [Moya.MultipartFormData] = []
+            if let avatar = avatar {
+                data.append(Moya.MultipartFormData(provider: .data(avatar), name: "avatar", fileName: "upload.jpeg", mimeType: "image/jpeg"))
+            }
+            if let userName = userName, let userNameData = String(userName).data(using: String.Encoding.utf8) {
+                data.append(MultipartFormData(provider: .data(userNameData), name: "username"))
+            }
             return data
         default:
             return nil
@@ -210,6 +213,9 @@ struct API {
                             switch statusCode {
                             case .unauthorized:
                                 LocalData.shared.token = ""
+                                DispatchQueue.main.async {
+                                    errorCallback(statusCode.rawValue)
+                                }
                             default:
                                 DispatchQueue.main.async {
                                     errorCallback(statusCode.rawValue)

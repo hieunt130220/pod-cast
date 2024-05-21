@@ -107,4 +107,25 @@ class UserRepository {
             failure(error, nil)
         })
     }
+    
+    func update(
+        avatar: Data? = nil,
+        userName: String? = nil,
+        completion: @escaping(_ user: User) -> Void,
+        failure: @escaping(_ error: Error?, _ statusCode: Int?) -> Void
+    ) {
+        _ = API.request(target: .updateProfile(avatar: avatar, userName: userName), success: { json, allHeaderFields in
+            guard let user: User = Mapper<User>().map(JSONObject: json?["data"].object) else {
+                failure(nil, nil)
+                return
+            }
+            DispatchQueue.main.async {
+                completion(user)
+            }
+        }, error: { statusCode in
+            failure(nil, statusCode)
+        }, failure: { error in
+            failure(error, nil)
+        })
+    }
 }

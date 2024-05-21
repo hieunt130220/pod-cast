@@ -35,7 +35,9 @@ class MyPageViewController: UIViewController, Paginable {
     }
     
     @objc private func setting() {
-        
+        let vc = SettingViewController()
+        vc.hidesBottomBarWhenPushed = true
+        navigationController?.pushViewController(vc, animated: true)
     }
     
     @objc private func refresh() {
@@ -113,6 +115,9 @@ extension MyPageViewController: UITableViewDelegate {
         let view = ProfileHeaderView()
         view.backgroundColor = .white
         view.user = self.user
+        view.changeAvatar.isHidden = false
+        view.editName.isHidden = false
+        view.delegate = self
         return view
     }
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -177,5 +182,51 @@ extension MyPageViewController: PodCastItemCellDelegate {
         vc.hidesBottomBarWhenPushed = true
         vc.podCast = cell.podCast
         navigationController?.pushViewController(vc, animated: true)
+    }
+}
+
+extension MyPageViewController: ProfileHeaderViewDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
+    func profileHeaderView(didTapEditNameInside view: ProfileHeaderView) {
+        let alert = UIAlertController(title: "Edit user name", message: "", preferredStyle: .alert)
+        alert.addTextField { tf in
+            tf.placeholder = "User name"
+            tf.text = self.user?.username
+        }
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in
+            guard let userName = alert.textFields![0].text?.trimmingCharacters(in: .whitespaces), !userName.isEmpty, userName != self.user?.username else {
+                return
+            }
+            self.view.activityIndicatorView.startAnimating()
+            AppRepository.user.update(userName: userName) { user in
+                self.user = user
+                self.view.activityIndicatorView.stopAnimating()
+            } failure: { error, statusCode in
+                self.showMessage("User name already exist")
+                self.view.activityIndicatorView.stopAnimating()
+            }
+        }))
+        present(alert, animated: true)
+    }
+    
+    func profileHeaderView(didTapChangeAvatarInside view: ProfileHeaderView) {
+        let picker = UIImagePickerController()
+        picker.sourceType = .photoLibrary
+        picker.allowsEditing = true
+        picker.delegate = self
+        present(picker, animated: true)
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        picker.dismiss(animated: false)
+        guard let image = info[.editedImage] as? UIImage else { return }
+        view.activityIndicatorView.startAnimating()
+        AppRepository.user.update(avatar: image.jpegData(compressionQuality: 1)) { user in
+            self.user = user
+            self.view.activityIndicatorView.stopAnimating()
+        } failure: { error, statusCode in
+            self.showMessage("Update failed")
+            self.view.activityIndicatorView.stopAnimating()
+        }
     }
 }
