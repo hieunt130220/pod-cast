@@ -103,13 +103,13 @@ const getAllPodcastByUserId = asyncHandler(async (req: IUserReq, res: Response) 
     const page: number = Number(req.query.page) || 1
     const query = { user: req.params.id }
     const podcasts = await Podcast.find(query)
-      .sort({uploadDate:-1}) 
+      .sort({ uploadDate: -1 })
       .populate("user", 'username avatar')
       .select('audio caption background likes comments uploadDate')
       .skip((limit * page) - limit)
       .limit(limit)
     const promises = podcasts.map(async (item: any) => {
-      return { 
+      return {
         _id: item.id,
         user: item.user,
         audio: item.audio,
@@ -146,11 +146,11 @@ const getPodcastFollowingUser = asyncHandler(async (req: IUserReq, res: Response
       const data = await Podcast.find({
         user: id,
       })
-      .populate("user", 'username avatar')
-      .select('audio background likes comments uploadDate')
+        .populate("user", 'username avatar')
+        .select('audio background likes comments uploadDate')
       return data;
     })
-    
+
     const data: any = [].concat(...(await Promise.all(promises))).map(async (item: any) => {
       return {
         _id: item.id,
@@ -203,10 +203,59 @@ const getDetailPodcast = asyncHandler(async (req: IUserReq, res: Response) => {
   }
 });
 
-const searchContentPodcast = asyncHandler(
+const getRecommendPodcasts = asyncHandler(
   async (req: Request, res: Response) => {
-    let searchKeyword = req.query.content;
+    try {
+      const podcastData = await Podcast.aggregate([
+        {
+          $project: {
+            user: 1,
+            audio: 1,
+            uploadDate: 1,
+            background: 1,
+            caption: 1,
+            content: 1,
+            likes: { $size: "$likes" },
+            comments: 1,
+          },
+        },
+        { $sort: { likes: -1 } },
+        { $limit: 5 },
+        {
+          $lookup: {
+            from: "users",
+            localField: "user",
+            foreignField: "_id",
+            as: "user",
+          },
+        },
+        { $unwind: "$user" },
+        {
+          $project: {
+            "user.username": 1,
+            "user.avatar": 1,
+            audio: 1,
+            uploadDate: 1,
+            background: 1,
+            caption: 1,
+            content: 1,
+            likes: 1,
+            comments: 1,
+          },
+        },
+      ]);
 
+      res.status(200).json({
+        podcastData,
+      });
+    } catch (error) {
+      res.status(500).json(error);
+    }
+  }
+);
+
+const searchContentPodcast = asyncHandler(async (req: Request, res: Response) => {
+    let searchKeyword = req.query.caption;
     try {
       let regex: RegExp;
 
@@ -227,7 +276,7 @@ const searchContentPodcast = asyncHandler(
       }
 
       res.status(200).json({
-        podcastData,
+        data: podcastData
       });
     } catch (error) {
       res.status(500).json(error);
@@ -251,10 +300,10 @@ const deletePodcastById = asyncHandler(async (req: IUserReq, res: Response) => {
     if (dataPodcast) {
       if (!podCastUser.podcasts.includes(idPodcast)) {
         return res.status(400)
-        .json({
-          status_code: 400,
-          message: "You can delete this pod cast"
-        }) 
+          .json({
+            status_code: 400,
+            message: "You can delete this pod cast"
+          })
       }
 
       await dataPodcast.remove();
@@ -326,7 +375,7 @@ const likePost = asyncHandler(async (req: IUserReq, res: Response) => {
     res.status(200).json({ status_code: 200, message: "Like success" });
   } catch (error) {
     console.log(error);
-    res.status(500).json({status_code: 500, message: error});
+    res.status(500).json({ status_code: 500, message: error });
   }
 });
 
@@ -366,13 +415,14 @@ const unLikePost = asyncHandler(async (req: IUserReq, res: Response) => {
     res.status(200).json({ status_code: 200, message: "Unlike success" });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ status_code: 500, message: error});
+    res.status(500).json({ status_code: 500, message: error });
   }
 });
 
 
 const commentPost = asyncHandler(async (req: IUserReq, res: Response) => {
   const now = new Date();
+  const uploadDate = now.toISOString();
   const podcast = await Podcast.findById(req.params.id);
   try {
     if (!podcast) {
@@ -380,18 +430,14 @@ const commentPost = asyncHandler(async (req: IUserReq, res: Response) => {
     }
 
     const comment = {
-      user: {
-        _id: req.user.id,
-        avatar: req.user.avatar,
-        username: req.user.username
-      },
+      user: req.user.id,
       text: req.body.comment,
       date: new Date(),
     };
 
     podcast.comments.push(comment);
     await podcast.save();
-    
+
     res.status(200).json({
       data: comment,
     });
@@ -409,7 +455,7 @@ const getCommentPost = asyncHandler(async (req: Request, res: Response) => {
       {
         comments: 1,
       }
-    ).sort({date:-1}).populate("comments.user", "username avatar");
+    ).populate("comments.user", "username avatar");
 
     res.status(200).json({
       data: podcast.comments,
@@ -428,6 +474,7 @@ export {
   getDetailPodcast,
   searchContentPodcast,
   deletePodcastById,
+  getRecommendPodcasts,
   likePost,
   unLikePost,
   commentPost,

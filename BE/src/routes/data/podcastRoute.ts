@@ -29,7 +29,7 @@ router.route("/new_feed")
   .get(getPodcastFollowingUser);
 
 router.route("/:id")
-  .get(getDetailPodcast)
+  // .get(getDetailPodcast)
   .delete(deletePodcastById);
 
 router.route("/:id/like")
@@ -42,7 +42,7 @@ router.route("/:id/comment")
   .get(getCommentPost)
   .post(commentPost)
 
-router.route("/search")
+router.route("/search/")
   .get(searchContentPodcast);
 
 module.exports = router;

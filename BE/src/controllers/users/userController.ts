@@ -71,11 +71,13 @@ const searchUserByUsername = asyncHandler(async (req: Request, res: Response) =>
         regex = new RegExp(keywordString, "i");
       }
 
-      const user = await User.find({
+      const users = await User.find({
         username: regex,
-      }).select("-password");
+      }).select("username avatar");
 
-      res.json(user);
+      res.json({
+        data: users
+      });
     } catch (error) {
       res.status(404).json({ error: error });
     }

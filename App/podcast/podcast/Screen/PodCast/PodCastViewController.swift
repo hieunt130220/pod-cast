@@ -62,10 +62,15 @@ class PodCastViewController: UIViewController {
     }
     
     @IBAction func tapUser(_ sender: Any) {
-        let vc = OtherUserViewController()
-        vc.user = podCast.user
-        print(podCast.user.id)
-        navigationController?.pushViewController(vc, animated: true)
+        let user = podCast.user
+        if user.isMe {
+            let vc = MyPageViewController()
+            navigationController?.pushViewController(vc, animated: true)
+        } else {
+            let vc = OtherUserViewController()
+            vc.user = user
+            navigationController?.pushViewController(vc, animated: true)
+        }
     }
     
     @IBAction func tapPlay(_ sender: Any) {

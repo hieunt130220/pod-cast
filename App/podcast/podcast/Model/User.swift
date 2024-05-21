@@ -35,3 +35,9 @@ class User: Mappable {
         isFollowed <- map["is_followed"]
     }
 }
+
+extension User {
+    var isMe: Bool {
+        return id == LocalData.shared.userId
+    }
+}

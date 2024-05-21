@@ -22,6 +22,7 @@ enum APIRouter {
     case getUser(uid: String)
     case follow(uid: String)
     case unFollow(uid: String)
+    case searchUser(textSearch: String)
     
     case newPodCast(caption: String, imgData: Data, audioData: Data)
     case getPodCastFollow(page: Int, limit: Int)
@@ -30,6 +31,7 @@ enum APIRouter {
     case unLikePostCast(postId: String)
     case getComment(postId: String, page: Int, limit: Int)
     case postComment(postId: String, comment: String)
+    case searchPodCast(textSearch: String)
 }
 
 extension APIRouter: TargetType {
@@ -62,6 +64,8 @@ extension APIRouter: TargetType {
             return "/users/\(uid)/follow"
         case .unFollow(let uid):
             return "/users/\(uid)/unFollow"
+        case .searchUser:
+            return "/users/search"
             
         case .newPodCast:
             return "/podcast"
@@ -77,6 +81,8 @@ extension APIRouter: TargetType {
             return "/podcast/\(postId)/comment"
         case .postComment(let postId, comment: _):
             return "/podcast/\(postId)/comment"
+        case .searchPodCast:
+            return "/podcast/search"
         }
     }
     var method: Moya.Method {
@@ -110,6 +116,8 @@ extension APIRouter: TargetType {
             return nil
         case .unFollow:
             return nil
+        case .searchUser(let text):
+            return ["username": text]
         case .newPodCast:
             return nil
         case .getPodCastFollow(let page, let limit):
@@ -124,6 +132,8 @@ extension APIRouter: TargetType {
             return ["page": page, "perPage": limit]
         case .postComment(postId: _, let comment):
             return ["comment": comment]
+        case .searchPodCast(let text):
+            return ["caption": text]
         }
     }
 

@@ -194,4 +194,24 @@ class PodCastRepository {
             }
         )
     }
+    
+    func search(
+        caption: String,
+        completion: @escaping(_ podCasts: [PodCast]) -> Void,
+        failure: @escaping(_ error: Error?, _ statusCode: Int?) -> Void
+    ) {
+        _ = API.request(target: .searchPodCast(textSearch: caption), success: { json, allHeaderFields in
+            guard let podCasts: [PodCast] = Mapper<PodCast>().mapArray(JSONObject: json?["data"].arrayObject) else {
+                failure(nil, nil)
+                return
+            }
+            DispatchQueue.main.async {
+                completion(podCasts)
+            }
+        }, error: { statusCode in
+            failure(nil, statusCode)
+        }, failure: { error in
+            failure(error, nil)
+        })
+    }
 }

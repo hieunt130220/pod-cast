@@ -39,7 +39,7 @@ enum TabBarItem: Int, CaseIterable {
         case .home:
             return UINavigationController(rootViewController: HomeViewController())
         case .search:
-            return UIViewController()
+            return UINavigationController(rootViewController: SearchViewController())
         case .profile:
             return UINavigationController(rootViewController: MyPageViewController())
         }

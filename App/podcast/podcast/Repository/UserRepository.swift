@@ -87,4 +87,24 @@ class UserRepository {
             }
         )
     }
+    
+    func search(
+        userName: String,
+        completion: @escaping(_ users: [User]) -> Void,
+        failure: @escaping(_ error: Error?, _ statusCode: Int?) -> Void
+    ) {
+        _ = API.request(target: .searchUser(textSearch: userName), success: { json, allHeaderFields in
+            guard let users: [User] = Mapper<User>().mapArray(JSONObject: json?["data"].arrayObject) else {
+                failure(nil, nil)
+                return
+            }
+            DispatchQueue.main.async {
+                completion(users)
+            }
+        }, error: { statusCode in
+            failure(nil, statusCode)
+        }, failure: { error in
+            failure(error, nil)
+        })
+    }
 }
