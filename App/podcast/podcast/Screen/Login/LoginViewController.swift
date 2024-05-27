@@ -19,7 +19,7 @@ class LoginViewController: UIViewController {
         let signUpText = "Sign up".styled(with: .color(.systemTeal), .font(.systemFont(ofSize: 15, weight: .bold)))
         signUpBtn.setAttributedTitle(.composed(of: [accountText, signUpText], separator: " "), for: .normal)
         emailTf.text = "nth2@gmail.com"
-        passwordTf.text = "12312311123"
+        passwordTf.text = "12345678"
     }
     @IBAction func tapLogin(_ sender: Any) {
         if emailTf.text?.isEmpty == true {

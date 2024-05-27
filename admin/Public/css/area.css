@@ -1,0 +1,131 @@
+:root {
+    --systemBorderColor: 199, 44%, 93%;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box
+}
+
+html {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/*
+ page
+ */
+
+body {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: #FFFFFF;
+}
+
+/*
+ page header
+ */
+
+body > header {
+    padding: 10px 25px;
+    background-color: #FFFFFF;
+    border-bottom: 1px solid #E5F0F5;
+}
+
+/*
+ page content
+ */
+
+body > main {
+    height: 90%;
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;
+}
+
+/*
+ page aside
+ */
+
+body > main > aside {
+    min-width: 200px;
+    width: 15%;
+    display: flex;
+    flex-direction: column;
+    background-color: #FAFCFD;
+    border-right: 1px solid #E5F0F5;
+}
+
+/*
+ aside content
+ */
+
+body > main > aside > section {
+    flex-grow: 1;
+    padding: 10px 15px;
+}
+
+/*
+ aside footer
+ */
+
+body > main > aside > footer {
+    padding: 10px 25px;
+    border-top: 1px solid #E5F0F5;
+}
+
+/*
+ content
+ */
+
+body > main > section {
+    width: 85%;
+    height: 100%;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    grid-template-columns: 77% 23%;
+    grid-template-areas: "header aside"
+                         "section aside"
+                         "footer aside";
+    overflow-y: scroll;
+}
+
+/*
+ content header
+ */
+
+body > main > section > header {
+    grid-area: header;
+    padding: 10px 25px;
+}
+
+/*
+ content content
+ */
+
+body > main > section > section {
+    grid-area: section;
+    padding: 10px 25px;
+}
+
+/*
+ content aside
+ */
+
+body > main > section > aside {
+    grid-area: aside;
+    padding: 10px 25px;
+    border-left: 1px solid #E5F0F5;
+}
+
+/*
+ content footer
+ */
+
+body > main > section > footer {
+    grid-area: footer;
+    padding: 10px 25px;
+}
