@@ -37,11 +37,7 @@ const UserSchema = new mongoose.Schema(
         default: [],
         ref: "User",
       },
-    ],
-    bio: {
-      type: String,
-      default: ""
-    }
+    ]
   },
   { timestamps: true }
 );
