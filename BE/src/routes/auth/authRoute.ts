@@ -4,7 +4,7 @@ import {
   changePasswordUser,
 } from "../../controllers/auth/authController";
 const router = require("express").Router();
-import verify from "../../middleware/tokenMiddleware";
+import {verify} from "../../middleware/tokenMiddleware";
 
 router.route("/login").post(loginUser);
 router.route("/register").post(registerUser);

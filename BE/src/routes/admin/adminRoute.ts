@@ -5,12 +5,12 @@ import {
         detailUser
 } from "../../controllers/admin/adminController";
 const router = require("express").Router();
-import verify from "../../middleware/tokenMiddleware";
+import {admin} from "../../middleware/tokenMiddleware";
 
 router.route("/login").post(login);
-router.route("/users").get(users);
-router.route("/podCasts").get(podCasts);
-router.route("/users/:id").get(detailUser)
+router.route("/users").get(admin, users);
+router.route("/podCasts").get(admin, podCasts);
+router.route("/users/:id").get(admin, detailUser)
 
 
 module.exports = router;

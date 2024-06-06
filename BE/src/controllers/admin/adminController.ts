@@ -4,9 +4,6 @@ const User = require("../../models/auth/userModel");
 const Podcast = require("../../models/data/podcastModel");
 const generateToken = require("../../utils/generateToken");
 
-const bcrypt = require("bcryptjs");
-const saltRounds = 10;
-
 const login = asyncHandler(async (req: Request, res: Response) => {
         const { email, password } = req.body;
 

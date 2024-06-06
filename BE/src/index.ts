@@ -11,7 +11,7 @@ const adminRoute = require("./routes/admin/adminRoute");
 
 const app: Application = express();
 const PORT = process.env.port || 8080;
-import verify from "../src/middleware/tokenMiddleware";
+import {verify} from "../src/middleware/tokenMiddleware";
 const bodyParser = require('body-parser')
 connectDB();
 
