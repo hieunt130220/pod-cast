@@ -160,4 +160,8 @@ extension HomeViewController: PodCastItemCellDelegate {
         vc.podCast = cell.podCast
         navigationController?.pushViewController(vc, animated: true)
     }
+    
+    func podCastItemCell(didTapDeleteButtonInside cell: PodCastItemCell) {
+        
+    }
 }

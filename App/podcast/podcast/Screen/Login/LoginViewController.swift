@@ -28,7 +28,7 @@ class LoginViewController: UIViewController {
         }
         
         if !emailTf.text!.isValid(.email) {
-            showMessage("Email invalid")
+            showMessage("This is not valid email format")
             return
         }
         
@@ -49,7 +49,7 @@ class LoginViewController: UIViewController {
             Constants.sceneDelegate?.appNavigator?.switchToMain()
         } failure: { error, statusCode in
             if statusCode == StatusCode.unauthorized.rawValue {
-                self.showMessage("Email or password is not correct")
+                self.showMessage("Wrong account or password")
             }
             self.view.activityIndicatorView.stopAnimating()
         }

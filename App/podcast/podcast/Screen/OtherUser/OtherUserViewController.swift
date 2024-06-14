@@ -174,6 +174,10 @@ extension OtherUserViewController: PodCastItemCellDelegate {
         vc.podCast = cell.podCast
         navigationController?.pushViewController(vc, animated: true)
     }
+    
+    func podCastItemCell(didTapDeleteButtonInside cell: PodCastItemCell) {
+        
+    }
 }
 
 extension OtherUserViewController: OtherUserHeaderViewDelegate {

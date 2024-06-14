@@ -287,7 +287,7 @@ const searchContentPodcast = asyncHandler(async (req: Request, res: Response) =>
 const deletePodcastById = asyncHandler(async (req: IUserReq, res: Response) => {
   const idPodcast = req.params.id;
   const idUser = req.user.id;
-
+  console.log(idPodcast)
   const podCastUser = await PodcastUser.findOne({
     user: idUser
   })
@@ -296,7 +296,6 @@ const deletePodcastById = asyncHandler(async (req: IUserReq, res: Response) => {
     const dataPodcast = await Podcast.findByIdAndDelete({
       _id: idPodcast,
     });
-
     if (dataPodcast) {
       if (!podCastUser.podcasts.includes(idPodcast)) {
         return res.status(400)

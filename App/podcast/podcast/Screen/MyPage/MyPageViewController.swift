@@ -95,6 +95,7 @@ extension MyPageViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(PodCastItemCell.self, for: indexPath)
         cell.podCast = myPodCasts[indexPath.row]
         cell.delegate = self
+        cell.deleteBtn.isHidden = false
         return cell
     }
     
@@ -182,6 +183,32 @@ extension MyPageViewController: PodCastItemCellDelegate {
         vc.hidesBottomBarWhenPushed = true
         vc.podCast = cell.podCast
         navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    func podCastItemCell(didTapDeleteButtonInside cell: PodCastItemCell) {
+        guard let id = cell.podCast?.id else { return }
+        let alert = UIAlertController(title: "Delete Podcast", message: "Do you want delete this podcast", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: { _ in
+            
+        }))
+        alert.addAction(UIAlertAction(title: "Yes", style: .destructive, handler: { _ in
+            self.deletePodcast(id)
+        }))
+        present(alert, animated: true)
+    }
+    
+    func deletePodcast(_ id: String) {
+        AppRepository.podCast.delete(id: id) { success in
+            if success {
+                self.showMessage("Delete podcast success") {
+                    self.myPodCasts.removeAll(where: {$0.id == id})
+                    self.tableView.reloadData()
+                }
+            }
+        } failure: { error, statusCode in
+            self.showMessage("Can not delete this podcast")
+        }
+
     }
 }
 

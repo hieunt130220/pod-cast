@@ -29,7 +29,6 @@ router.route("/new_feed")
   .get(getPodcastFollowingUser);
 
 router.route("/:id")
-  // .get(getDetailPodcast)
   .delete(deletePodcastById);
 
 router.route("/:id/like")
