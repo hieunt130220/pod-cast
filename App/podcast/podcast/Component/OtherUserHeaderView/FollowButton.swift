@@ -15,6 +15,7 @@ class FollowButton: UIButton {
             borderColor = isFollow ? .clear : .blue
             setTitleColor(isFollow ? .white : .blue, for: .normal)
             backgroundColor = isFollow ? .blue : .clear
+            setTitle(isFollow ? "Following" : "Follow", for: .normal)
         }
     }
     

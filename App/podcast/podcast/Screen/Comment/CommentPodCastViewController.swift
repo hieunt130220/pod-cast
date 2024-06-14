@@ -181,6 +181,10 @@ extension CommentPodCastViewController: PodCastItemCellDelegate {
     func podCastItemCell(didTapCommentButtonInside cell: PodCastItemCell) {
         
     }
+    
+    func podCastItemCell(didTapDeleteButtonInside cell: PodCastItemCell) {
+        
+    }
 }
 
 extension CommentPodCastViewController: UITextFieldDelegate {

@@ -9,10 +9,16 @@ import UIKit
 protocol PodCastItemCellDelegate: AnyObject {
     func podCastItemCell(didTapLikeButtonInside cell: PodCastItemCell)
     func podCastItemCell(didTapCommentButtonInside cell: PodCastItemCell)
+    func podCastItemCell(didTapDeleteButtonInside cell: PodCastItemCell)
 }
 
 class PodCastItemCell: UITableViewCell {
 
+    @IBOutlet weak var deleteBtn: UIButton! {
+        didSet {
+            deleteBtn.isHidden = true
+        }
+    }
     @IBOutlet weak var avatarImageView: UIImageView!
     @IBOutlet weak var userNameLbl: UILabel!
     @IBOutlet weak var captionLbl: UILabel!
@@ -52,5 +58,9 @@ class PodCastItemCell: UITableViewCell {
     }
     @IBAction func tapLike(_ sender: Any) {
         delegate?.podCastItemCell(didTapLikeButtonInside: self)
+    }
+    
+    @IBAction func tapDelete(_ sender: Any) {
+        delegate?.podCastItemCell(didTapDeleteButtonInside: self)
     }
 }

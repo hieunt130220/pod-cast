@@ -14,7 +14,7 @@ class SignUpViewController: UIViewController {
     @IBOutlet weak var userNameTf: UITextField!
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "Register"
+        title = "Sign up"
         // Do any additional setup after loading the view.
     }
     @IBAction func tapRegister(_ sender: Any) {
@@ -34,7 +34,7 @@ class SignUpViewController: UIViewController {
         }
         
         if !emailTf.text!.isValid(.email) {
-            showMessage("Email invalid")
+            showMessage("This is not valid email format")
             return
         }
         
@@ -51,13 +51,12 @@ class SignUpViewController: UIViewController {
         view.activityIndicatorView.startAnimating()
         AppRepository.auth.register(params: .init(username: userNameTf.text!, email: emailTf.text!, password: passwordTf.text!)) { token in
             self.view.activityIndicatorView.stopAnimating()
-            LocalData.shared.token = token
             self.showMessage("Register success") {
-                Constants.sceneDelegate?.appNavigator?.switchToMain()
+                Constants.sceneDelegate?.appNavigator?.switchToAuth()
             }
         } failure: { error, statusCode in
             if statusCode == StatusCode.badRequest.rawValue {
-                self.showMessage("Email or user name is already exists")
+                self.showMessage("Account already exists")
             }
             self.view.activityIndicatorView.stopAnimating()
         }

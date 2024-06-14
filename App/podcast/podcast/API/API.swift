@@ -25,6 +25,7 @@ enum APIRouter {
     case unFollow(uid: String)
     case searchUser(textSearch: String)
     
+    case deletePodcast(id: String)
     case newPodCast(caption: String, imgData: Data, audioData: Data)
     case getPodCastFollow(page: Int, limit: Int)
     case getPodCast(userId: String, page: Int, limit: Int)
@@ -70,6 +71,8 @@ extension APIRouter: TargetType {
         case .searchUser:
             return "/users/search"
             
+        case .deletePodcast(let id):
+            return "/podcast/\(id)"
         case .newPodCast:
             return "/podcast"
         case .getPodCastFollow:
@@ -101,6 +104,8 @@ extension APIRouter: TargetType {
                 .follow,
                 .unFollow:
             return .post
+        case .deletePodcast:
+            return .delete
         case .updateProfile:
             return .put
         default: return .get

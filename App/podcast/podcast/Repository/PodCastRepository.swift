@@ -214,4 +214,29 @@ class PodCastRepository {
             failure(error, nil)
         })
     }
+    
+    func delete(
+        id: String,
+        completion: ((_ success: Bool) -> Void)? = { _ in },
+        failure: ((_ error: NSError?, _ statusCode: Int?) -> Void)? = { _, _ in }
+        ) {
+        let _ = API.request(
+            target: .deletePodcast(id: id),
+            success: { json, allHeaderFields in
+                guard let status = json?["status_code"].intValue else {
+                    failure?(nil, nil)
+                    return
+                }
+                DispatchQueue.main.async {
+                    completion?(status == StatusCode.success.rawValue)
+                }
+            },
+            error: { statusCode in
+                failure?(nil, statusCode)
+            },
+            failure: { error in
+                failure?((error as NSError), nil)
+            }
+        )
+    }
 }
