@@ -23,21 +23,17 @@ const verify = asyncHandler(
         req.user = await User.findById(decoded.id);
         next();
       } catch (error) {
-        res.status(401).json(
-          {
-            status_code: 401,
-            message: "Unauthorized"
-          }
-        )
+        res.status(401).json({
+          status_code: 401,
+          message: "Unauthorized",
+        });
       }
     }
     if (!token) {
-      res.status(401).json(
-        {
-          status_code: 401,
-          message: "Unauthorized"
-        }
-      )
+      res.status(401).json({
+        status_code: 401,
+        message: "Unauthorized",
+      });
     }
   }
 );
@@ -57,32 +53,26 @@ const admin = asyncHandler(
         const user = await User.findById(decoded.id);
         if (user.role === "ROLE_ADMIN") {
           next();
-          return
+          return;
         }
-        res.status(403).json(
-          {
-            status_code: 403,
-            message: "Permission denied"
-          }
-        )
+        res.status(403).json({
+          status_code: 403,
+          message: "Permission denied",
+        });
       } catch (error) {
-        res.status(401).json(
-          {
-            status_code: 401,
-            message: "Unauthorized"
-          }
-        )
+        res.status(401).json({
+          status_code: 401,
+          message: "Unauthorized",
+        });
       }
     }
     if (!token) {
-      res.status(401).json(
-        {
-          status_code: 401,
-          message: "Unauthorized"
-        }
-      )
+      res.status(401).json({
+        status_code: 401,
+        message: "Unauthorized",
+      });
     }
   }
 );
 
-export {verify, admin};
+export { verify, admin };
