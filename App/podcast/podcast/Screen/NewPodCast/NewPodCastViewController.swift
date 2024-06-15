@@ -71,6 +71,7 @@ extension NewPodCastViewController: UIDocumentPickerDelegate {
     func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
         guard let url = urls.first else { return }
         podcastUrl = url
+        chooseFileBtn.setTitle(url.lastPathComponent, for: .normal)
         controller.dismiss(animated: true)
     }
 }
