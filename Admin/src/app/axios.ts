@@ -1,13 +1,11 @@
 import axios from "axios";
 
 const baseURL = import.meta.env.VITE_API_URL;
-const token = import.meta.env.VITE_TOKEN;
 
 const instance = axios.create({
   baseURL,
 });
-
-instance.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+console.log(baseURL)
 
 // Add a request interceptor
 instance.interceptors.request.use(

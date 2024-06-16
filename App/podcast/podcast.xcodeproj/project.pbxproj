@@ -61,7 +61,6 @@
 		EAEA5BC32BFD16820006CC37 /* SettingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = EAEA5BC12BFD16820006CC37 /* SettingViewController.xib */; };
 		EAEB1AE82BCD2A9B00FE5298 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAEB1AE72BCD2A9B00FE5298 /* AppDelegate.swift */; };
 		EAEB1AEA2BCD2A9B00FE5298 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAEB1AE92BCD2A9B00FE5298 /* SceneDelegate.swift */; };
-		EAEB1AEC2BCD2A9B00FE5298 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAEB1AEB2BCD2A9B00FE5298 /* ViewController.swift */; };
 		EAEB1AEF2BCD2A9B00FE5298 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EAEB1AED2BCD2A9B00FE5298 /* Main.storyboard */; };
 		EAEB1AF12BCD2A9E00FE5298 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EAEB1AF02BCD2A9E00FE5298 /* Assets.xcassets */; };
 		EAEB1AF42BCD2A9E00FE5298 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EAEB1AF22BCD2A9E00FE5298 /* LaunchScreen.storyboard */; };
@@ -133,7 +132,6 @@
 		EAEB1AE42BCD2A9B00FE5298 /* podcast.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = podcast.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EAEB1AE72BCD2A9B00FE5298 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		EAEB1AE92BCD2A9B00FE5298 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		EAEB1AEB2BCD2A9B00FE5298 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		EAEB1AEE2BCD2A9B00FE5298 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		EAEB1AF02BCD2A9E00FE5298 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		EAEB1AF32BCD2A9E00FE5298 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -202,6 +200,19 @@
 				EA2CC5822BE3A04800B8CEA6 /* SignUpViewController.xib */,
 			);
 			path = SignUp;
+			sourceTree = "<group>";
+		};
+		EA4091982C1E912300836BB3 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				EAEB1AE72BCD2A9B00FE5298 /* AppDelegate.swift */,
+				EAEB1AE92BCD2A9B00FE5298 /* SceneDelegate.swift */,
+				EAEB1AED2BCD2A9B00FE5298 /* Main.storyboard */,
+				EAEB1AF02BCD2A9E00FE5298 /* Assets.xcassets */,
+				EAEB1AF22BCD2A9E00FE5298 /* LaunchScreen.storyboard */,
+				EAEB1AF52BCD2A9E00FE5298 /* Info.plist */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 		EABC1AB52BFC5F8B003AC63D /* CommentItem */ = {
@@ -369,19 +380,13 @@
 		EAEB1AE62BCD2A9B00FE5298 /* podcast */ = {
 			isa = PBXGroup;
 			children = (
+				EA4091982C1E912300836BB3 /* Resources */,
 				EAEA5B8D2BEA8C270006CC37 /* Component */,
 				EAEB1B0C2BCE0EB400FE5298 /* Ultils */,
 				EAEB1B022BCD30E900FE5298 /* Repository */,
 				EAEB1B012BCD30E400FE5298 /* Model */,
 				EAEB1B002BCD30DE00FE5298 /* Screen */,
 				EAEB1AFB2BCD2B8000FE5298 /* API */,
-				EAEB1AE72BCD2A9B00FE5298 /* AppDelegate.swift */,
-				EAEB1AE92BCD2A9B00FE5298 /* SceneDelegate.swift */,
-				EAEB1AEB2BCD2A9B00FE5298 /* ViewController.swift */,
-				EAEB1AED2BCD2A9B00FE5298 /* Main.storyboard */,
-				EAEB1AF02BCD2A9E00FE5298 /* Assets.xcassets */,
-				EAEB1AF22BCD2A9E00FE5298 /* LaunchScreen.storyboard */,
-				EAEB1AF52BCD2A9E00FE5298 /* Info.plist */,
 			);
 			path = podcast;
 			sourceTree = "<group>";
@@ -594,7 +599,6 @@
 			files = (
 				EA2CC56D2BE3268800B8CEA6 /* LoginViewController.swift in Sources */,
 				EAEA5B722BEA85950006CC37 /* TabBarItem.swift in Sources */,
-				EAEB1AEC2BCD2A9B00FE5298 /* ViewController.swift in Sources */,
 				EAEA5B8C2BEA8B7E0006CC37 /* NSObject+ext.swift in Sources */,
 				EAEA5B8A2BEA8B650006CC37 /* ReuseableView+ext.swift in Sources */,
 				EAEA5BC22BFD16820006CC37 /* SettingViewController.swift in Sources */,
@@ -797,7 +801,7 @@
 					"$(PROJECT_DIR)",
 				);
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = podcast/Info.plist;
+				INFOPLIST_FILE = podcast/Resources/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Podcast;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -836,7 +840,7 @@
 					"$(PROJECT_DIR)",
 				);
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = podcast/Info.plist;
+				INFOPLIST_FILE = podcast/Resources/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Podcast;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;

@@ -25,7 +25,7 @@ app.use(bodyParser.json());
 app.use("/api/auth", authRoute);
 app.use("/api/podcast", verify, podcastRoute);
 app.use("/api/users", verify, userRoute);
-app.use("/api/admin", verify, adminRoute);
+app.use("/api/admin", adminRoute);
 
 app.listen(PORT, () => {
   console.log(`server is running on port ${PORT}`);
