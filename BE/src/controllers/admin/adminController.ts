@@ -141,12 +141,7 @@ const deletePodcast = asyncHandler(async (req: Request, res: Response) => {
     if (!podcast) {
       return res.status(404).json({ error: "Podcast not found" });
     }
-    if (!podCastUser.podcasts.includes(idPodcast)) {
-      return res.status(400).json({
-        status_code: 400,
-        message: "You can delete this podcast",
-      });
-    }
+    
     await podcast.remove();
 
     await PodcastUser.updateOne(

@@ -43,7 +43,9 @@ class NewPodCastViewController: UIViewController {
                                         background: imageData,
                                         audio: podCastData, completion: {[weak self] postCast in
             self?.view.activityIndicatorView.stopAnimating()
-            self?.navigationController?.popViewController(animated: true)
+            self?.showMessage("Upload successfully", completion: {
+                self?.navigationController?.popViewController(animated: true)
+            })
         }, failure: {[weak self] error, statusCode in
             self?.showMessage("Error while uploading file")
             self?.view.activityIndicatorView.stopAnimating()

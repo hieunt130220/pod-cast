@@ -121,7 +121,7 @@ class PodCastRepository {
         let _ = API.request(
             target: .newPodCast(caption: caption, imgData: background, audioData: audio),
             success: { json, allHeaderFields in
-                guard let data = json?["data"], let postCast: PodCast = Mapper<PodCast>().map(JSONObject: data) else {
+                guard let data = json?["data"].object, let postCast: PodCast = Mapper<PodCast>().map(JSONObject: data) else {
                     failure?(nil, nil)
                     return
                 }

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22155" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22131"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22685"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -10,9 +10,9 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SignUpViewController" customModule="podcast" customModuleProvider="target">
             <connections>
-                <outlet property="emailTf" destination="4sj-PP-7l5" id="aaD-sN-y0O"/>
-                <outlet property="passwordTf" destination="1S7-b0-uhP" id="5RT-Ft-fV1"/>
-                <outlet property="userNameTf" destination="4sj-PP-7l5" id="CgA-9l-yTS"/>
+                <outlet property="emailTf" destination="4sj-PP-7l5" id="Bah-mX-m3o"/>
+                <outlet property="passwordTf" destination="1S7-b0-uhP" id="3mh-Gh-tAY"/>
+                <outlet property="userNameTf" destination="ExI-Gk-TgE" id="nKW-yh-qcz"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -77,7 +77,7 @@
                                                 <constraint firstAttribute="height" constant="40" id="eJf-ao-I58"/>
                                             </constraints>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                            <textInputTraits key="textInputTraits" returnKeyType="done" secureTextEntry="YES" textContentType="password"/>
+                                            <textInputTraits key="textInputTraits" returnKeyType="done" secureTextEntry="YES" textContentType="username"/>
                                         </textField>
                                     </subviews>
                                 </stackView>

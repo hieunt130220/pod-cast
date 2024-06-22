@@ -34,6 +34,7 @@ extension String {
     }
     
     func isValid(_ type: ContentType) -> Bool {
+        print(self)
         return isSatifyRegex(pattern: type.regex)
     }
 }

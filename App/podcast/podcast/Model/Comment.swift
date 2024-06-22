@@ -20,6 +20,6 @@ class Comment: Mappable {
         id <- map["_id"]
         user <- map["user"]
         text <- map["text"]
-        date <- (map["uploadDate"], CustomDateFormatTransform(formatString: "yyyy-MM-dd'T'HH:mm:ss.SSSZ"))
+        date <- (map["date"], CustomDateFormatTransform(formatString: "yyyy-MM-dd'T'HH:mm:ss.SSSZ"))
     }
 }

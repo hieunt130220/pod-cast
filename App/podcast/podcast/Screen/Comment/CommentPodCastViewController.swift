@@ -31,7 +31,7 @@ class CommentPodCastViewController: UIViewController, Paginable {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.backgroundColor = .systemGray6
-        tableView.contentInset = UIEdgeInsets(top: 16, left: 0, bottom: 0, right: 0)
+        tableView.contentInset = UIEdgeInsets(top: 16, left: 0, bottom: 100, right: 0)
         commentTf.delegate = self
         
         fetch()

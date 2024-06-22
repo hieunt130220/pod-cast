@@ -24,7 +24,7 @@ class SignUpViewController: UIViewController {
         }
         
         if !userNameTf.text!.isValid(.username) {
-            showMessage("Password contain 3-16 alphabet character and numberic")
+            showMessage("Username contain 3-16 alphabet character and numberic")
             return
         }
         
@@ -52,7 +52,7 @@ class SignUpViewController: UIViewController {
         AppRepository.auth.register(params: .init(username: userNameTf.text!, email: emailTf.text!, password: passwordTf.text!)) { token in
             self.view.activityIndicatorView.stopAnimating()
             self.showMessage("Register success") {
-                Constants.sceneDelegate?.appNavigator?.switchToAuth()
+                self.navigationController?.popViewController(animated: true)
             }
         } failure: { error, statusCode in
             if statusCode == StatusCode.badRequest.rawValue {
